@@ -18,7 +18,8 @@ class ViewController: UIViewController {
     var inputString = String()
     var companySearchArray = [String]()
     @IBOutlet weak var stockChartView: LineChartView!
-    var lineChartEntry = [ChartDataEntry]()
+    var stockPrice = [Double]()
+    
     let dropDown = DropDown()
     var symb = String()
     var theResultsArray : [String: String] = [:]
@@ -72,14 +73,13 @@ class ViewController: UIViewController {
             for (key, subJSON) in results["Time Series (Daily)"] {
                 let open = subJSON["1. open"].rawString()
                 theResultsArray[key] = open
-                //print(theResultsArray)
             }
+
             
-            let sortedKeysAndValues = Array(theResultsArray.keys).sorted(by: <)
-            //sortedKeysAndValues.hashValue
-            //            theResultsArray = [String: String](uniqueKeysWithValues: theResultsArray.sorted { $0.key < $1.key})
-            print(sortedKeysAndValues)
-            //print(sortedKeysAndValues.hashValue)
+//            for key in theResultsArray.keys.sorted(by: <) {
+//                print("\(key) \(theResultsArray.values)")
+//            }
+
             
         } catch  {
             print("ERROR")
@@ -105,9 +105,32 @@ class ViewController: UIViewController {
     
     @IBAction func searchPressed(_ sender: Any) {
         stockPrice(input: symb)
-        print(theResultsArray.values)
+        //print(theResultsArray.values)
+        for key in theResultsArray.keys.sorted(by: <) {
+            //print("\(key) \(theResultsArray[key])")
+            let price = Double(theResultsArray[key]!)!
+            stockPrice.append(price)
+            updateGraph()
+        }
+        
     }
-    
+    func updateGraph() {
+        var lineChartEntry = [ChartDataEntry]()
+        
+        for i in 0 ..< stockPrice.count {
+            let value = ChartDataEntry(x: Double(i), y: stockPrice[i])
+            lineChartEntry.append(value)
+        }
+        
+        let line1 = LineChartDataSet(entries: lineChartEntry, label: "Price")
+        line1.colors = [NSUIColor.blue]
+        
+        let data = LineChartData()
+        data.addDataSet(line1)
+        
+        stockChartView.data = data
+        stockChartView.chartDescription?.text = "Stock Price"
+    }
     
     
 }
