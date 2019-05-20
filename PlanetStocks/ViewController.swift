@@ -17,7 +17,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var inputTyped: UITextField!
     var inputString = String()
     var companySearchArray = [String]()
-    @IBOutlet weak var stockChartView: LineChartView!
+    @IBOutlet weak var stockChartView: CombinedChartView!
     var stockPrice = [Double]()
     var vol = [Double]()
     var theDates = [String]()
@@ -77,6 +77,7 @@ class ViewController: UIViewController {
                 let volume = subJSON["5. volume"].rawString()
                 theResultsArray[key] = open
                 theVolumeArray[key] = volume
+                
             }
 
             
@@ -109,12 +110,14 @@ class ViewController: UIViewController {
             //print("\(key) \(theResultsArray[key])")
             let price = Double(theResultsArray[key]!)!
             let volume = Double(theVolumeArray[key]!)!
+            let divVol = volume / 50
             stockPrice.append(price)
-            vol.append(volume)
+            vol.append(divVol)
             theDates.append(key)
         }
 //        setChartData()
-        generateLineData()
+        //generateLineData()
+        convertCombined(dataEntryX: theDates, dataEntryY:stockPrice , dataEntryZ: vol)
         
 
        
@@ -124,6 +127,44 @@ class ViewController: UIViewController {
         
     }
     
+    func convertCombined(dataEntryX forX:[String],dataEntryY forY: [Double], dataEntryZ forZ: [Double]) {
+        var dataEntries: [BarChartDataEntry] = []
+        var dataEntrieszor: [ChartDataEntry] = [ChartDataEntry]()
+        for (i, v) in forY.enumerated() {
+            let dataEntry = ChartDataEntry(x: Double(i), y: v, data: forX as AnyObject?)
+            dataEntrieszor.append(dataEntry)
+        }
+        
+        for (i, v) in forZ.enumerated() {
+            let dataEntry = BarChartDataEntry(x: Double(i), y: v, data: forX as AnyObject?)
+            dataEntries.append(dataEntry)
+            
+        }
+        
+        
+        let lineChartSet = LineChartDataSet(entries: dataEntrieszor, label: "Stock Price")
+        let lineChartData = LineChartData(dataSets: [lineChartSet])
+        
+        let barChartSet = BarChartDataSet(entries: dataEntries, label: "Volume")
+        let barChartData = BarChartData(dataSets: [barChartSet])
+        
+        //ui
+        lineChartSet.setColor(UIColor.red)
+        lineChartSet.setCircleColor(UIColor.red)
+        
+        let comData = CombinedChartData(dataSets: [lineChartSet,barChartSet])
+        comData.barData = barChartData
+        comData.lineData = lineChartData
+        
+        stockChartView.data = comData
+        stockChartView.notifyDataSetChanged()
+        stockChartView.xAxis.valueFormatter = IndexAxisValueFormatter(values: theDates)
+        stockChartView.xAxis.granularity = 1
+        stockChartView.animate(xAxisDuration: 2, yAxisDuration: 2, easingOption: ChartEasingOption.easeInBounce)
+        
+        
+        
+    }
     
     
     func generateLineData() {
@@ -151,35 +192,13 @@ class ViewController: UIViewController {
         stockChartView.data = data
         stockChartView.chartDescription?.text = "Stock Price"
         stockChartView.xAxis.valueFormatter = IndexAxisValueFormatter(values: theDates)
-        stockChartView.animate(xAxisDuration: 2.0, yAxisDuration: 2.0)
+        //stockChartView.animate(xAxisDuration: 2.0, yAxisDuration: 2.0)
+        stockChartView.animate(xAxisDuration: 2, yAxisDuration: 2, easingOption: ChartEasingOption.easeInBounce)
         stockChartView.leftAxis.labelTextColor = .white
     }
-    func generateBarData() -> BarChartData {
-        let entries = (0..<vol.count).map { (i) -> BarChartDataEntry in
-            return BarChartDataEntry(x: 0, y: vol[i])
-            
-        }
-        
-        let volBars = BarChartDataSet(entries: entries, label: "Volume")
-        volBars.setColor(UIColor(red: 60/255, green: 220/255, blue: 78/255, alpha: 1))
-        let groupSpace = 0.06
-        let barSpace = 0.02
-        let barWidth = 0.45
-        
-        let data = BarChartData(dataSet: volBars)
-        data.barWidth = barWidth
-        data.groupBars(fromX: 0, groupSpace: groupSpace, barSpace: barSpace)
-        
-        return data
-    }
+
     
-    
-    
-    func setChartData() {
-        let data = CombinedChartData()
-        //data.lineData = generateLineData()
-        //data.barData = generateBarData()
-    }
+
     
     
 }
