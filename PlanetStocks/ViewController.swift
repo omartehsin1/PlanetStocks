@@ -19,12 +19,13 @@ class ViewController: UIViewController {
     var companySearchArray = [String]()
     @IBOutlet weak var stockChartView: LineChartView!
     var stockPrice = [Double]()
+    var vol = [Double]()
     var theDates = [String]()
     var doubleDates = [Double]()
-    @IBOutlet weak var dateLabel: UILabel!
     let dropDown = DropDown()
     var symb = String()
     var theResultsArray : [String: String] = [:]
+    var theVolumeArray : [String: String] = [:]
     //var api = "JOW9MYUHX9HWJTDE"
     //var api = "9TR204K3GERJQJ33"
     var api = "LI32913MGB8ROSV6"
@@ -33,11 +34,13 @@ class ViewController: UIViewController {
         
         inputTyped.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         // Do any additional setup after loading the view.
+        
     }
     @objc func textFieldDidChange(_ textField: UITextField) {
         setUpDropDown()
         
     }
+    
     
     
     func stockSearch(input: String, completion: @escaping ([String]) ->()) {
@@ -71,7 +74,9 @@ class ViewController: UIViewController {
             let results = try JSON(data: data! as Data)
             for (key, subJSON) in results["Time Series (Daily)"] {
                 let open = subJSON["1. open"].rawString()
+                let volume = subJSON["5. volume"].rawString()
                 theResultsArray[key] = open
+                theVolumeArray[key] = volume
             }
 
             
@@ -103,30 +108,33 @@ class ViewController: UIViewController {
         for key in theResultsArray.keys.sorted(by: <) {
             //print("\(key) \(theResultsArray[key])")
             let price = Double(theResultsArray[key]!)!
+            let volume = Double(theVolumeArray[key]!)!
             stockPrice.append(price)
+            vol.append(volume)
             theDates.append(key)
         }
+//        setChartData()
+        generateLineData()
+        
 
-        updateGraph()
+       
     }
     @IBAction func clearButtonPressed(_ sender: Any) {
         inputTyped.text = ""
-        updateGraph()
+        
     }
     
     
     
-    func updateGraph() {
-        var lineChartEntry = [ChartDataEntry]()
+    func generateLineData() {
+
         
+        var lineChartEntry = [ChartDataEntry]()
         for i in 0 ..< stockPrice.count {
             let value = ChartDataEntry(x: Double(i), y: stockPrice[i])
             lineChartEntry.append(value)
         }
-        for index in 0..<theDates.count {
-            print(theDates[index])
-            dateLabel.text = "\(theDates[index])"
-        }
+
         let line1 = LineChartDataSet(entries: lineChartEntry, label: "Price")
         line1.colors = [NSUIColor.blue]
         line1.circleRadius = 1
@@ -134,29 +142,47 @@ class ViewController: UIViewController {
         line1.drawFilledEnabled = true
         line1.fillColor = .blue
         
-        
+
+
         let data = LineChartData()
         data.addDataSet(line1)
-        
-        
+
+
         stockChartView.data = data
         stockChartView.chartDescription?.text = "Stock Price"
+        stockChartView.xAxis.valueFormatter = IndexAxisValueFormatter(values: theDates)
+        stockChartView.animate(xAxisDuration: 2.0, yAxisDuration: 2.0)
+        stockChartView.leftAxis.labelTextColor = .white
+    }
+    func generateBarData() -> BarChartData {
+        let entries = (0..<vol.count).map { (i) -> BarChartDataEntry in
+            return BarChartDataEntry(x: 0, y: vol[i])
+            
+        }
+        
+        let volBars = BarChartDataSet(entries: entries, label: "Volume")
+        volBars.setColor(UIColor(red: 60/255, green: 220/255, blue: 78/255, alpha: 1))
+        let groupSpace = 0.06
+        let barSpace = 0.02
+        let barWidth = 0.45
+        
+        let data = BarChartData(dataSet: volBars)
+        data.barWidth = barWidth
+        data.groupBars(fromX: 0, groupSpace: groupSpace, barSpace: barSpace)
+        
+        return data
+    }
+    
+    
+    
+    func setChartData() {
+        let data = CombinedChartData()
+        //data.lineData = generateLineData()
+        //data.barData = generateBarData()
     }
     
     
 }
 
-extension String {
-    static let shortDateUS: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.calendar = Calendar(identifier: .iso8601)
-        formatter.locale = Locale(identifier: "en_US_POSIX")
-        formatter.dateStyle = .short
-        return formatter
-    }()
-    var shortDateUS: Date? {
-        return String.shortDateUS.date(from: self)
-    }
-}
 
 
