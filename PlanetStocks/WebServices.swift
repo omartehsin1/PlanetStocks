@@ -7,8 +7,9 @@
 //
 
 import Foundation
+import Alamofire
 import SwiftyJSON
 
-class StockData {
-    
+class WebServices{
+
 }

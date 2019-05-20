@@ -19,7 +19,9 @@ class ViewController: UIViewController {
     var companySearchArray = [String]()
     @IBOutlet weak var stockChartView: LineChartView!
     var stockPrice = [Double]()
-    
+    var theDates = [String]()
+    var doubleDates = [Double]()
+    @IBOutlet weak var dateLabel: UILabel!
     let dropDown = DropDown()
     var symb = String()
     var theResultsArray : [String: String] = [:]
@@ -64,21 +66,13 @@ class ViewController: UIViewController {
         let url = URL(string: "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=\(symb)&apikey=\(api)")! //got an error here, find a way to only do symbol
         print(url)
         let data = NSData(contentsOf: url)
-        
-//        var dateArray = [String]()
-//        let dateFormatter = DateFormatter()
-//        dateFormatter.dateFormat = "yyyy-mm-dd"
+
         do {
             let results = try JSON(data: data! as Data)
             for (key, subJSON) in results["Time Series (Daily)"] {
                 let open = subJSON["1. open"].rawString()
                 theResultsArray[key] = open
             }
-
-            
-//            for key in theResultsArray.keys.sorted(by: <) {
-//                print("\(key) \(theResultsArray.values)")
-//            }
 
             
         } catch  {
@@ -110,10 +104,18 @@ class ViewController: UIViewController {
             //print("\(key) \(theResultsArray[key])")
             let price = Double(theResultsArray[key]!)!
             stockPrice.append(price)
-            updateGraph()
+            theDates.append(key)
         }
-        
+
+        updateGraph()
     }
+    @IBAction func clearButtonPressed(_ sender: Any) {
+        inputTyped.text = ""
+        updateGraph()
+    }
+    
+    
+    
     func updateGraph() {
         var lineChartEntry = [ChartDataEntry]()
         
@@ -121,12 +123,21 @@ class ViewController: UIViewController {
             let value = ChartDataEntry(x: Double(i), y: stockPrice[i])
             lineChartEntry.append(value)
         }
-        
+        for index in 0..<theDates.count {
+            print(theDates[index])
+            dateLabel.text = "\(theDates[index])"
+        }
         let line1 = LineChartDataSet(entries: lineChartEntry, label: "Price")
         line1.colors = [NSUIColor.blue]
+        line1.circleRadius = 1
+        line1.fillAlpha = 1
+        line1.drawFilledEnabled = true
+        line1.fillColor = .blue
+        
         
         let data = LineChartData()
         data.addDataSet(line1)
+        
         
         stockChartView.data = data
         stockChartView.chartDescription?.text = "Stock Price"
@@ -147,4 +158,5 @@ extension String {
         return String.shortDateUS.date(from: self)
     }
 }
+
 
