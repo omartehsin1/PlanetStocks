@@ -7,26 +7,99 @@
 //
 
 import UIKit
+import Alamofire
+import SwiftyJSON
 
 class NewsViewController: UIViewController {
-
+    @IBOutlet weak var newsTableView: UITableView!
+    var api = "pmew5pipmigx109vcailn67fmvgcirgwzgbznvq3"
+    var titleArray = [String]()
+    var imageURLArray = [String]()
+    var newsURLArray = [String]()
+    var dateArray = [String]()
+    //var articleDict : [String : Any] = [:]
     override func viewDidLoad() {
         super.viewDidLoad()
+        newsTableView.delegate = self
+        newsTableView.dataSource = self
         //pmew5pipmigx109vcailn67fmvgcirgwzgbznvq3
         // https://stocknewsapi.com/api/v1?tickers=(TICKER)&items=10&fallback=true&token=(API)
-
+        let theInput = "TSLA"
+        getNews(input: theInput)
+        
         // Do any additional setup after loading the view.
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    func getNews(input: String) {
+        let url = URL(string: "https://stocknewsapi.com/api/v1?tickers=\(input)&items=10&fallback=true&token=\(api)")!
+        Alamofire.request(url).responseJSON { (response) in
+            if let jsonValue = response.result.value {
+                let json = JSON(jsonValue)
+                
+                
+                for(_, subJSON) in json["data"]{
+                    if let theTitle = subJSON["title"].rawString(), let imageURL = subJSON["image_url"].rawString(),
+                        let newsURL = subJSON["news_url"].rawString(),
+                        let theDate = subJSON["date"].rawString(){
+                        
+                        let aTitle = theTitle
+                        self.titleArray.append(aTitle)
+                        self.imageURLArray.append(imageURL)
+                        self.newsURLArray.append(newsURL)
+                        self.dateArray.append(theDate)
+                    }
+                    //print(self.newsURLArray)
+                    
+                }
+                
+                DispatchQueue.main.async {
+                    self.newsTableView.reloadData()
+                    //print(self.titleArray)
+                }
+                
+                
+            }
+            
+        }
+        
+        
+        
     }
-    */
+    
+    
+    
+}
+
+class NewsTableCell : UITableViewCell {
+    @IBOutlet weak var newPicView: UIImageView!
+    @IBOutlet weak var newsTitleLabel: UILabel!
+    @IBOutlet weak var dateTitleLabel: UILabel!
+    
+}
+
+
+
+
+extension NewsViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        print(titleArray)
+        return titleArray.count
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let newsCell = newsTableView.dequeueReusableCell(withIdentifier: "newsCell") as! NewsTableCell
+        newsCell.newsTitleLabel.text = titleArray[indexPath.row]
+        newsCell.dateTitleLabel.text = dateArray[indexPath.row]
+        
+        //if let newsImageURL =
+        
+        
+        return newsCell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        <#code#>
+    }
+
 
 }

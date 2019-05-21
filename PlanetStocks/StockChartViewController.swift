@@ -94,12 +94,12 @@ class StockChartViewController: UIViewController {
         dropDown.direction = .any
         dropDown.dismissMode = .onTap
         DropDown.appearance().backgroundColor = UIColor(white: 1, alpha: 0.8)
-//        dropDown.selectionAction = { [unowned self] (index: Int, item: String) in
-//            print("Selected item: \(item) at index: \(index)")
-//            //            let arr = item.split(separator: " ")
-//            //            let s = String(arr[0])
-//            self.inputTyped.text = item
-//        }
+        dropDown.selectionAction = { [unowned self] (index: Int, item: String) in
+            print("Selected item: \(item) at index: \(index)")
+            //            let arr = item.split(separator: " ")
+            //            let s = String(arr[0])
+            self.inputTyped.text = item
+        }
         stockSearch(input: inputTyped.text!) { (resultsArr) in
             self.dropDown.dataSource = resultsArr
             self.dropDown.show()
