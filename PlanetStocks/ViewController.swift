@@ -110,14 +110,14 @@ class ViewController: UIViewController {
             //print("\(key) \(theResultsArray[key])")
             let price = Double(theResultsArray[key]!)!
             let volume = Double(theVolumeArray[key]!)!
-            let divVol = volume / 50
+            //let divVol = volume / 100
             stockPrice.append(price)
-            vol.append(divVol)
+            vol.append(volume)
             theDates.append(key)
         }
 //        setChartData()
         //generateLineData()
-        convertCombined(dataEntryX: theDates, dataEntryY:stockPrice , dataEntryZ: vol)
+        convertCombined(dataEntryX: theDates, dataEntryY:vol , dataEntryZ: stockPrice)
         
 
        
@@ -140,10 +140,12 @@ class ViewController: UIViewController {
             dataEntries.append(dataEntry)
             
         }
-        
+        //let max = stockPrice.max()
         
         let lineChartSet = LineChartDataSet(entries: dataEntrieszor, label: "Stock Price")
         let lineChartData = LineChartData(dataSets: [lineChartSet])
+       
+        
         
         let barChartSet = BarChartDataSet(entries: dataEntries, label: "Volume")
         let barChartData = BarChartData(dataSets: [barChartSet])
@@ -156,12 +158,27 @@ class ViewController: UIViewController {
         comData.barData = barChartData
         comData.lineData = lineChartData
         
+        
         stockChartView.data = comData
         stockChartView.notifyDataSetChanged()
         stockChartView.xAxis.valueFormatter = IndexAxisValueFormatter(values: theDates)
         stockChartView.xAxis.granularity = 1
-        stockChartView.animate(xAxisDuration: 2, yAxisDuration: 2, easingOption: ChartEasingOption.easeInBounce)
+        //stockChartView.rightAxis.axisMaximum = stockPrice.max()!
+        stockChartView.leftAxis.axisMaximum = vol.max()!
         
+//        let stringArray = stockPrice.map { String($0) }
+//        let otherStringArray = vol.map { String($0) }
+//        print(stringArray)
+//
+//        let leftFormatter = CustomYAxisLabelValueFormatter()
+//        leftFormatter.Ylabels = otherStringArray
+//
+//        let rightFormatter = CustomYAxisLabelValueFormatter()
+//        rightFormatter.Ylabels = stringArray
+        
+        //stockChartView.animate(xAxisDuration: 2, yAxisDuration: 2)
+//        stockChartView.leftAxis.valueFormatter = leftFormatter
+//        stockChartView.rightAxis.valueFormatter = rightFormatter
         
         
     }
@@ -192,11 +209,24 @@ class ViewController: UIViewController {
         stockChartView.data = data
         stockChartView.chartDescription?.text = "Stock Price"
         stockChartView.xAxis.valueFormatter = IndexAxisValueFormatter(values: theDates)
-        //stockChartView.animate(xAxisDuration: 2.0, yAxisDuration: 2.0)
-        stockChartView.animate(xAxisDuration: 2, yAxisDuration: 2, easingOption: ChartEasingOption.easeInBounce)
+        stockChartView.animate(xAxisDuration: 2.0, yAxisDuration: 2.0)
+//        stockChartView.animate(xAxisDuration: 2, yAxisDuration: 2, easingOption: ChartEasingOption.easeInBounce)
         stockChartView.leftAxis.labelTextColor = .white
     }
-
+    
+   
+    
+    @IBAction func segmentTapped(_ sender: UISegmentedControl) {
+        
+        switch sender.selectedSegmentIndex {
+        case 0:
+            performSegue(withIdentifier: "toNewsVC", sender: self)
+        default:
+            break
+        }
+        
+    }
+    
     
 
     
@@ -204,4 +234,58 @@ class ViewController: UIViewController {
 }
 
 
+class CustomLabelsAxisValueFormatter : NSObject, IAxisValueFormatter
+{
+    
+    var labels: [String] = []
+    
+    func stringForValue(_ value: Double, axis: AxisBase?) -> String {
+        let count = self.labels.count
+        
+        guard let axis = axis, count > 0 else {
+            
+            return ""
+        }
+        
+        let factor = axis.axisMaximum / Double(count)
+        
+        let index = Int((value / factor).rounded())
+        
+        if index >= 0 && index < count {
+            
+            return self.labels[index]
+        }
+        
+        return ""
+    }
+    
+    
+}
 
+class CustomYAxisLabelValueFormatter : NSObject, IAxisValueFormatter {
+    
+    
+    var Ylabels: [String] = []
+    
+    func stringForValue(_ value: Double, axis: AxisBase?) -> String {
+        let count = self.Ylabels.count
+        
+        guard let axis = axis, count > 0 else {
+            
+            return ""
+        }
+        
+        let factor = axis.axisMaximum / Double(count)
+        
+        let index = Int((value / factor).rounded())
+        
+        if index >= 0 && index < count {
+            
+            return self.Ylabels[index]
+        }
+        
+        return ""
+    }
+    
+    
+}
