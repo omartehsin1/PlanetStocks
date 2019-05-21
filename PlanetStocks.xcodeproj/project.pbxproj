@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		073CA53E2294905F0051A4C2 /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073CA53D2294905F0051A4C2 /* Alert.swift */; };
 		074C1B60228F229F0020E1A6 /* WebServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 074C1B5F228F229F0020E1A6 /* WebServices.swift */; };
 		074C1B63229444830020E1A6 /* NewsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 074C1B62229444820020E1A6 /* NewsViewController.swift */; };
 		074C1B6522944F850020E1A6 /* StockChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 074C1B6422944F850020E1A6 /* StockChartViewController.swift */; };
@@ -32,6 +33,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		073CA53D2294905F0051A4C2 /* Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
 		074C1B5F228F229F0020E1A6 /* WebServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebServices.swift; sourceTree = "<group>"; };
 		074C1B62229444820020E1A6 /* NewsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsViewController.swift; sourceTree = "<group>"; };
 		074C1B6422944F850020E1A6 /* StockChartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockChartViewController.swift; sourceTree = "<group>"; };
@@ -111,6 +113,7 @@
 				074C1B5F228F229F0020E1A6 /* WebServices.swift */,
 				07C2CD07228DC7BC00758CE7 /* Main.storyboard */,
 				074C1B62229444820020E1A6 /* NewsViewController.swift */,
+				073CA53D2294905F0051A4C2 /* Alert.swift */,
 				07C2CD0D228DC7BE00758CE7 /* Assets.xcassets */,
 				07C2CD0F228DC7BE00758CE7 /* LaunchScreen.storyboard */,
 				07C2CD12228DC7BE00758CE7 /* Info.plist */,
@@ -333,6 +336,7 @@
 				074C1B63229444830020E1A6 /* NewsViewController.swift in Sources */,
 				074C1B6522944F850020E1A6 /* StockChartViewController.swift in Sources */,
 				07C2CD04228DC7BC00758CE7 /* AppDelegate.swift in Sources */,
+				073CA53E2294905F0051A4C2 /* Alert.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

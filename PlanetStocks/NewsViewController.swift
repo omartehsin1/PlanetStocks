@@ -18,16 +18,25 @@ class NewsViewController: UIViewController {
     var newsURLArray = [String]()
     var dateArray = [String]()
     //var articleDict : [String : Any] = [:]
+    var stockChartVC = StockChartViewController()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         newsTableView.delegate = self
         newsTableView.dataSource = self
         //pmew5pipmigx109vcailn67fmvgcirgwzgbznvq3
         // https://stocknewsapi.com/api/v1?tickers=(TICKER)&items=10&fallback=true&token=(API)
-        let theInput = "TSLA"
-        getNews(input: theInput)
+ 
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        guard let theInput = stockChartVC.inputTyped.text else {
+            Alert.showIncompleteFormAlert(on: self)
+            return
+        }
         
-        // Do any additional setup after loading the view.
+        
+        getNews(input: theInput)
     }
     
     func getNews(input: String) {
@@ -91,14 +100,30 @@ extension NewsViewController: UITableViewDelegate, UITableViewDataSource {
         newsCell.newsTitleLabel.text = titleArray[indexPath.row]
         newsCell.dateTitleLabel.text = dateArray[indexPath.row]
         
-        //if let newsImageURL =
+        let newsImageURL = imageURLArray[indexPath.row]
+        let url = URL(string: newsImageURL)
+        URLSession.shared.dataTask(with: url!) { (data, response, error) in
+            if error != nil {
+                print(error)
+                return
+            }
+            DispatchQueue.main.async {
+                newsCell.imageView?.image = UIImage(data: data!)
+            }
+            
+        }.resume()
+        
         
         
         return newsCell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        <#code#>
+        let urlString = self.newsURLArray[indexPath.row]
+        
+        if let url = URL(string: urlString) {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        }
     }
 
 
