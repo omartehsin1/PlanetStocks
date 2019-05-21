@@ -12,6 +12,8 @@ class NewsViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        //pmew5pipmigx109vcailn67fmvgcirgwzgbznvq3
+        // https://stocknewsapi.com/api/v1?tickers=(TICKER)&items=10&fallback=true&token=(API)
 
         // Do any additional setup after loading the view.
     }
