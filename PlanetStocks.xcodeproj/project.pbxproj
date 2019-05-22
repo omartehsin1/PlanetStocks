@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		073CA53E2294905F0051A4C2 /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073CA53D2294905F0051A4C2 /* Alert.swift */; };
+		073CA5402295A2240051A4C2 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073CA53F2295A2240051A4C2 /* HomeViewController.swift */; };
+		073CA5422295B09E0051A4C2 /* PersistanceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 073CA5412295B09E0051A4C2 /* PersistanceService.swift */; };
 		074C1B60228F229F0020E1A6 /* WebServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 074C1B5F228F229F0020E1A6 /* WebServices.swift */; };
 		074C1B63229444830020E1A6 /* NewsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 074C1B62229444820020E1A6 /* NewsViewController.swift */; };
 		074C1B6522944F850020E1A6 /* StockChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 074C1B6422944F850020E1A6 /* StockChartViewController.swift */; };
@@ -34,6 +36,8 @@
 
 /* Begin PBXFileReference section */
 		073CA53D2294905F0051A4C2 /* Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
+		073CA53F2295A2240051A4C2 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		073CA5412295B09E0051A4C2 /* PersistanceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistanceService.swift; sourceTree = "<group>"; };
 		074C1B5F228F229F0020E1A6 /* WebServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebServices.swift; sourceTree = "<group>"; };
 		074C1B62229444820020E1A6 /* NewsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsViewController.swift; sourceTree = "<group>"; };
 		074C1B6422944F850020E1A6 /* StockChartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockChartViewController.swift; sourceTree = "<group>"; };
@@ -112,6 +116,8 @@
 				074C1B6422944F850020E1A6 /* StockChartViewController.swift */,
 				074C1B5F228F229F0020E1A6 /* WebServices.swift */,
 				07C2CD07228DC7BC00758CE7 /* Main.storyboard */,
+				073CA5412295B09E0051A4C2 /* PersistanceService.swift */,
+				073CA53F2295A2240051A4C2 /* HomeViewController.swift */,
 				074C1B62229444820020E1A6 /* NewsViewController.swift */,
 				073CA53D2294905F0051A4C2 /* Alert.swift */,
 				07C2CD0D228DC7BE00758CE7 /* Assets.xcassets */,
@@ -333,6 +339,8 @@
 				074C1B60228F229F0020E1A6 /* WebServices.swift in Sources */,
 				07C2CD0C228DC7BC00758CE7 /* PlanetStocks.xcdatamodeld in Sources */,
 				07C2CD06228DC7BC00758CE7 /* ViewController.swift in Sources */,
+				073CA5402295A2240051A4C2 /* HomeViewController.swift in Sources */,
+				073CA5422295B09E0051A4C2 /* PersistanceService.swift in Sources */,
 				074C1B63229444830020E1A6 /* NewsViewController.swift in Sources */,
 				074C1B6522944F850020E1A6 /* StockChartViewController.swift in Sources */,
 				07C2CD04228DC7BC00758CE7 /* AppDelegate.swift in Sources */,

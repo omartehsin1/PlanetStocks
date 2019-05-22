@@ -18,6 +18,8 @@ class NewsViewController: UIViewController {
     var newsURLArray = [String]()
     var dateArray = [String]()
     //var articleDict : [String : Any] = [:]
+    var theInput = String()
+    
     var stockChartVC = StockChartViewController()
     
     override func viewDidLoad() {
@@ -26,21 +28,24 @@ class NewsViewController: UIViewController {
         newsTableView.dataSource = self
         //pmew5pipmigx109vcailn67fmvgcirgwzgbznvq3
         // https://stocknewsapi.com/api/v1?tickers=(TICKER)&items=10&fallback=true&token=(API)
- 
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        guard let theInput = stockChartVC.inputTyped.text else {
-            Alert.showIncompleteFormAlert(on: self)
-            return
-        }
+        theInput = "TSLA"
+        
+        
         
         
         getNews(input: theInput)
     }
     
     func getNews(input: String) {
+        
         let url = URL(string: "https://stocknewsapi.com/api/v1?tickers=\(input)&items=10&fallback=true&token=\(api)")!
+        
+        
+        
         Alamofire.request(url).responseJSON { (response) in
             if let jsonValue = response.result.value {
                 let json = JSON(jsonValue)
@@ -50,9 +55,7 @@ class NewsViewController: UIViewController {
                     if let theTitle = subJSON["title"].rawString(), let imageURL = subJSON["image_url"].rawString(),
                         let newsURL = subJSON["news_url"].rawString(),
                         let theDate = subJSON["date"].rawString(){
-                        
-                        let aTitle = theTitle
-                        self.titleArray.append(aTitle)
+                        self.titleArray.append(theTitle)
                         self.imageURLArray.append(imageURL)
                         self.newsURLArray.append(newsURL)
                         self.dateArray.append(theDate)
@@ -94,7 +97,7 @@ extension NewsViewController: UITableViewDelegate, UITableViewDataSource {
         print(titleArray)
         return titleArray.count
     }
-
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let newsCell = newsTableView.dequeueReusableCell(withIdentifier: "newsCell") as! NewsTableCell
         newsCell.newsTitleLabel.text = titleArray[indexPath.row]
@@ -111,7 +114,7 @@ extension NewsViewController: UITableViewDelegate, UITableViewDataSource {
                 newsCell.imageView?.image = UIImage(data: data!)
             }
             
-        }.resume()
+            }.resume()
         
         
         
@@ -125,6 +128,11 @@ extension NewsViewController: UITableViewDelegate, UITableViewDataSource {
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
         }
     }
-
-
+    
+    
 }
+
+
+//class NewsInfor: NSDictionary {
+//
+//}
