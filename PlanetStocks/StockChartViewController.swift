@@ -18,7 +18,11 @@ class StockChartViewController: UIViewController {
     
     var inputString = String()
     var companySearchArray = [String]()
-    @IBOutlet weak var stockChartView: CombinedChartView!
+    @IBOutlet weak var stockChartView: LineChartView!
+    @IBOutlet weak var barChartView: BarChartView!
+    
+    
+    
     var stockPrice = [Double]()
     var vol = [Double]()
     var theDates = [String]()
@@ -49,7 +53,8 @@ class StockChartViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        convertCombined(dataEntryX: theDates, dataEntryY: stockPrice, dataEntryZ: vol)
+        //convertCombined(dataEntryX: theDates, dataEntryY: stockPrice, dataEntryZ: vol)
+        generateLineData()
     }
     
     
@@ -78,7 +83,31 @@ class StockChartViewController: UIViewController {
     }
     
 
-    
+    func generateBarChart() {
+        var barChartEntry: [BarChartDataEntry] = [BarChartDataEntry]()
+        for i in 0 ..< vol.count {
+            let value = BarChartDataEntry(x: Double(i), y: vol[i])
+            barChartEntry.append(value)
+        }
+        
+        let volBars = BarChartDataSet(entries: barChartEntry, label: "Volume")
+        volBars.setColor(UIColor(red: 60/255, green: 220/255, blue: 78/255, alpha: 1))
+        let groupSpace = 0.06
+        let barSpace = 0.02
+        let barWidth = 0.45
+        
+        
+        let data = BarChartData(dataSet: volBars)
+        data.barWidth = barWidth
+        data.groupBars(fromX: 0, groupSpace: groupSpace, barSpace: barSpace)
+        
+        
+        barChartView.data = data
+        barChartView.chartDescription?.text = "Volume"
+        barChartView.animate(xAxisDuration: 2.0, yAxisDuration: 2.0)
+        barChartView.leftAxis.labelTextColor = .white
+        
+    }
 
     
     func convertCombined(dataEntryX forX:[String],dataEntryY forY: [Double], dataEntryZ forZ: [Double]) {
@@ -117,25 +146,11 @@ class StockChartViewController: UIViewController {
         stockChartView.notifyDataSetChanged()
         stockChartView.xAxis.valueFormatter = IndexAxisValueFormatter(values: theDates)
         stockChartView.xAxis.granularity = 1
-        //stockChartView.rightAxis.axisMaximum = stockPrice.max()!
-        //stockChartView.leftAxis.axisMaximum = vol.max()!
-        
-        //        let stringArray = stockPrice.map { String($0) }
-        //        let otherStringArray = vol.map { String($0) }
-        //        print(stringArray)
-        //
-        //        let leftFormatter = CustomYAxisLabelValueFormatter()
-        //        leftFormatter.Ylabels = otherStringArray
-        //
-        //        let rightFormatter = CustomYAxisLabelValueFormatter()
-        //        rightFormatter.Ylabels = stringArray
-        
-        //stockChartView.animate(xAxisDuration: 2, yAxisDuration: 2)
-        //        stockChartView.leftAxis.valueFormatter = leftFormatter
-        //        stockChartView.rightAxis.valueFormatter = rightFormatter
-        
-        
+        stockChartView.rightAxis.axisMaximum = stockPrice.max()!
+        stockChartView.leftAxis.axisMaximum = vol.max()!
     }
+    
+    
     
     
     func generateLineData() {

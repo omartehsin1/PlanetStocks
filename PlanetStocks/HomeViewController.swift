@@ -18,12 +18,14 @@ class HomeViewController: UIViewController {
     var companyName = String()
     var symbolArray = [String]()
     var theSymbol = String()
+    var newCellSymbol = String()
     //var api = "JOW9MYUHX9HWJTDE"
     var api = "9TR204K3GERJQJ33"
     //var api = "LI32913MGB8ROSV6"
     let dropDown = DropDown()
     var stocks = [Stocks]()
-    var newSymbol = [String]()
+    
+    var cellSymbolArray = [String]()
     
     @IBOutlet weak var stockSearchTextField: UITextField!
 
@@ -59,26 +61,27 @@ class HomeViewController: UIViewController {
     }
     
     @IBAction func searchButtonPressed(_ sender: Any) {
-        newSymbol = symbol.components(separatedBy: " ")
+        let newSymbol = symbol.components(separatedBy: " ")
 //        print(newSymbol)
-        symbolArray.append(newSymbol[0])
+        //symbolArray.append(newSymbol[0])
         theSymbol = newSymbol[0]
         
         performSegue(withIdentifier: "goToMain", sender: self)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let mainVC = segue.destination as! MainViewController
         if segue.identifier == "goToMain" {
-            let mainVC = segue.destination as! MainViewController
-
+            
             mainVC.symb = theSymbol
             mainVC.theAPI = api
             
-            print("Prepare for segue symbol is: \(theSymbol)")
-
-
-            //present(mainVC, animated: true, completion: nil)
         }
+        else if segue.identifier == "goToMainFromCell" {
+            mainVC.symb = newCellSymbol
+            mainVC.theAPI = api
+        }
+        
     }
     
     @IBAction func clearButtonPressed(_ sender: Any) {
@@ -179,6 +182,18 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
             tableView.deleteRows(at: [indexPath], with: .fade)
             PersistanceService.saveContext()
         }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let cellSymbol = stocks[indexPath.row].symbol!
+        let theCellSymbol = cellSymbol.components(separatedBy: " ")
+        
+        newCellSymbol = theCellSymbol[0]
+        
+        
+        print(newCellSymbol)
+        self.myStocksTableView.deselectRow(at: indexPath as IndexPath, animated: true)
+        performSegue(withIdentifier: "goToMainFromCell", sender: self)
     }
     
     
