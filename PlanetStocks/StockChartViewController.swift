@@ -15,7 +15,7 @@ import Charts
 class StockChartViewController: UIViewController {
     //API KEY: 9TR204K3GERJQJ33
     //JOW9MYUHX9HWJTDE
-    @IBOutlet weak var inputTyped: UITextField!
+    
     var inputString = String()
     var companySearchArray = [String]()
     @IBOutlet weak var stockChartView: CombinedChartView!
@@ -23,51 +23,32 @@ class StockChartViewController: UIViewController {
     var vol = [Double]()
     var theDates = [String]()
     var doubleDates = [Double]()
-    let dropDown = DropDown()
+    let homeVC = HomeViewController()
     var symb = String()
+    var theAPI = String()
     var theResultsArray : [String: String] = [:]
     var theVolumeArray : [String: String] = [:]
     //var api = "JOW9MYUHX9HWJTDE"
-    var api = "9TR204K3GERJQJ33"
+    
     //var api = "LI32913MGB8ROSV6"
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        inputTyped.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        
         // Do any additional setup after loading the view.
         
     }
-    @objc func textFieldDidChange(_ textField: UITextField) {
-        setUpDropDown()
-        
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        stockPrice(input: symb, api: theAPI)
     }
     
     
     
-    func stockSearch(input: String, completion: @escaping ([String]) ->()) {
-        var resultsArray = [String]()
-        let url = URL(string: "https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=\(inputTyped.text!)&apikey=\(api)")!
-        //print(url)
-        Alamofire.request(url).responseJSON { (response) in
-            if let jsonValue = response.result.value {
-                let json = JSON(jsonValue)
-                
-                for(_, subJSON) in json["bestMatches"] {
-                    if let name = subJSON["2. name"].rawString(), let symbol = subJSON["1. symbol"].rawString() {
-                        self.symb = symbol
-                        let result = "\(symbol) - \(name)"
-                        resultsArray.append(result)
-                    }
-                }
-            }
-            completion(resultsArray)
-        }
-        
-        
-    }
     
-    func stockPrice(input: String) {
-        let url = URL(string: "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=\(symb)&apikey=\(api)")! //got an error here, find a way to only do symbol
+    func stockPrice(input: String, api: String) {
+        let url = URL(string: "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=\(input)&apikey=\(api)")! //got an error here, find a way to only do symbol
         print(url)
         let data = NSData(contentsOf: url)
         
@@ -88,48 +69,9 @@ class StockChartViewController: UIViewController {
         
     }
     
-    func setUpDropDown() {
-        dropDown.anchorView = inputTyped
-        dropDown.bottomOffset = CGPoint(x: 0, y: inputTyped.bounds.height)
-        dropDown.direction = .any
-        dropDown.dismissMode = .onTap
-        DropDown.appearance().backgroundColor = UIColor(white: 1, alpha: 0.8)
-        dropDown.selectionAction = { [unowned self] (index: Int, item: String) in
-            print("Selected item: \(item) at index: \(index)")
-            //            let arr = item.split(separator: " ")
-            //            let s = String(arr[0])
-            self.inputTyped.text = item
-        }
-        stockSearch(input: inputTyped.text!) { (resultsArr) in
-            self.dropDown.dataSource = resultsArr
-            self.dropDown.show()
-            //print(resultsArr)
-        }
-    }
+
     
-    @IBAction func searchPressed(_ sender: Any) {
-        stockPrice(input: symb)
-        //print(theResultsArray.values)
-        for key in theResultsArray.keys.sorted(by: <) {
-            //print("\(key) \(theResultsArray[key])")
-            let price = Double(theResultsArray[key]!)!
-            let volume = Double(theVolumeArray[key]!)!
-            //let divVol = volume / 100
-            stockPrice.append(price)
-            vol.append(volume)
-            theDates.append(key)
-        }
-        //        setChartData()
-        //generateLineData()
-        convertCombined(dataEntryX: theDates, dataEntryY:vol , dataEntryZ: stockPrice)
-        
-        
-        
-    }
-    @IBAction func clearButtonPressed(_ sender: Any) {
-        inputTyped.text = ""
-        
-    }
+
     
     func convertCombined(dataEntryX forX:[String],dataEntryY forY: [Double], dataEntryZ forZ: [Double]) {
         var dataEntries: [BarChartDataEntry] = []

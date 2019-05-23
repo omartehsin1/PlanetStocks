@@ -76,16 +76,9 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Sym" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cIU-dd-evy">
-                                                    <rect key="frame" x="0.0" y="11" width="57" height="21"/>
+                                                    <rect key="frame" x="0.0" y="11" width="264" height="21"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Com" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wNy-Qv-cg9">
-                                                    <rect key="frame" x="65" y="11" width="163" height="21"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -106,7 +99,6 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="companyName" destination="wNy-Qv-cg9" id="JJf-3x-0of"/>
                                             <outlet property="percentChange" destination="aLh-Bu-S1a" id="sPM-Th-6kO"/>
                                             <outlet property="stockPrice" destination="DLF-uP-TyU" id="ALq-Pg-44m"/>
                                             <outlet property="stockSymbol" destination="cIU-dd-evy" id="g9u-EF-XmV"/>
@@ -122,106 +114,60 @@
                     <connections>
                         <outlet property="myStocksTableView" destination="BsM-SN-2Qk" id="2Ex-rO-gPl"/>
                         <outlet property="stockSearchTextField" destination="37E-I2-JVm" id="1zM-4a-Spu"/>
-                        <segue destination="BYZ-38-t0r" kind="show" id="mFZ-sj-GQq"/>
+                        <segue destination="qas-eQ-mMr" kind="show" identifier="goToMain" id="dNd-iR-5Nv"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XAC-gS-vSZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2639.1999999999998" y="101.19940029985008"/>
         </scene>
-        <!--View Controller-->
-        <scene sceneID="tne-QT-ifu">
+        <!--Main View Controller-->
+        <scene sceneID="s9y-oV-Ov2">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="PlanetStocks" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                <viewController id="qas-eQ-mMr" customClass="MainViewController" customModule="PlanetStocks" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="NEC-UJ-uvc">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Aj3-C8-Z9j">
-                                <rect key="frame" x="97" y="64" width="159" height="29"/>
-                                <segments>
-                                    <segment title="Home"/>
-                                    <segment title="News"/>
-                                    <segment title="List"/>
-                                </segments>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yvK-P4-P1Y">
+                                <rect key="frame" x="167" y="165" width="40" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Stock"/>
                                 <connections>
-                                    <action selector="segmentTapped:" destination="BYZ-38-t0r" eventType="valueChanged" id="itC-Xb-AhI"/>
+                                    <action selector="stockButtonPressed:" destination="qas-eQ-mMr" eventType="touchUpInside" id="5XW-3z-m9w"/>
                                 </connections>
-                            </segmentedControl>
-                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EO5-rW-gNf" userLabel="StockChartView">
-                                <rect key="frame" x="0.0" y="100" width="375" height="567"/>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uxO-lT-X3T">
+                                <rect key="frame" x="168" y="309" width="39" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="News"/>
                                 <connections>
-                                    <segue destination="Pya-oS-Ojv" kind="embed" identifier="toNewsVC" id="kd6-Zz-Jh5"/>
+                                    <action selector="newsButtonPressed:" destination="qas-eQ-mMr" eventType="touchUpInside" id="Ozw-aD-nzv"/>
                                 </connections>
-                            </containerView>
-                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6TU-1n-hUa" userLabel="NewsView">
-                                <rect key="frame" x="0.0" y="100" width="375" height="567"/>
-                                <connections>
-                                    <segue destination="GIK-ud-BGk" kind="embed" identifier="toStockChartVC" id="A3L-Mb-9Dj"/>
-                                </connections>
-                            </containerView>
+                            </button>
                         </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstItem="EO5-rW-gNf" firstAttribute="top" secondItem="Aj3-C8-Z9j" secondAttribute="bottom" constant="8" id="Fwk-Ja-llZ"/>
-                            <constraint firstItem="EO5-rW-gNf" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="HZV-Aw-gfh"/>
-                            <constraint firstItem="Aj3-C8-Z9j" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="QGC-Wz-ykd"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="Aj3-C8-Z9j" secondAttribute="trailing" constant="119" id="UUH-OQ-2PY"/>
-                            <constraint firstItem="EO5-rW-gNf" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="VOu-0L-MBA"/>
-                            <constraint firstItem="6TU-1n-hUa" firstAttribute="top" secondItem="Aj3-C8-Z9j" secondAttribute="bottom" constant="8" id="WyZ-io-70c"/>
-                            <constraint firstItem="EO5-rW-gNf" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="XwQ-TP-xUY"/>
-                            <constraint firstItem="6TU-1n-hUa" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="dXP-ww-P2O"/>
-                            <constraint firstItem="6TU-1n-hUa" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="j0F-Eq-Mu5"/>
-                            <constraint firstItem="6TU-1n-hUa" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="mbu-qW-RgN"/>
-                            <constraint firstItem="EO5-rW-gNf" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="100" id="of3-i0-wmq"/>
-                            <constraint firstItem="Aj3-C8-Z9j" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="97" id="pTF-KJ-QRI"/>
-                            <constraint firstItem="EO5-rW-gNf" firstAttribute="top" secondItem="Aj3-C8-Z9j" secondAttribute="bottom" constant="8" id="qEn-az-CTF"/>
-                        </constraints>
-                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="IaL-Dh-NRO"/>
                     </view>
-                    <navigationItem key="navigationItem" id="uHh-Cd-gl3"/>
                     <connections>
-                        <outlet property="newView" destination="6TU-1n-hUa" id="6VL-iu-Yub"/>
-                        <outlet property="stockChartView" destination="EO5-rW-gNf" id="bPX-jM-pan"/>
+                        <segue destination="GIK-ud-BGk" kind="show" identifier="toStockChartVC" id="Bd7-38-eGQ"/>
+                        <segue destination="Pya-oS-Ojv" kind="show" identifier="toNewsVC" id="5l5-Ks-7uk"/>
                     </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="2BO-WS-rjN" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3508" y="112.89355322338831"/>
+            <point key="canvasLocation" x="3598" y="93"/>
         </scene>
         <!--Stock Chart View Controller-->
         <scene sceneID="reX-pn-4Ph">
             <objects>
                 <viewController id="GIK-ud-BGk" customClass="StockChartViewController" customModule="PlanetStocks" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8Ah-ys-BuE">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="567"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="bWT-MF-mNF">
-                                <rect key="frame" x="16" y="20" width="343" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <nil key="textColor"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b5M-m1-pr6">
-                                <rect key="frame" x="15" y="58" width="48" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Search"/>
-                                <connections>
-                                    <action selector="searchPressed:" destination="GIK-ud-BGk" eventType="touchUpInside" id="uKp-s4-2Xp"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Lh9-ne-RD6">
-                                <rect key="frame" x="318" y="58" width="36" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Clear"/>
-                                <connections>
-                                    <action selector="clearButtonPressed:" destination="GIK-ud-BGk" eventType="touchUpInside" id="rIE-vl-fvq"/>
-                                </connections>
-                            </button>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="815-A7-43g" customClass="CombinedChartView" customModule="Charts">
-                                <rect key="frame" x="0.0" y="96" width="375" height="471"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
@@ -230,7 +176,6 @@
                         <viewLayoutGuide key="safeArea" id="H4Y-3u-YMB"/>
                     </view>
                     <connections>
-                        <outlet property="inputTyped" destination="bWT-MF-mNF" id="ZNq-iZ-N1R"/>
                         <outlet property="stockChartView" destination="815-A7-43g" id="6nv-Ah-nZu"/>
                     </connections>
                 </viewController>
@@ -243,11 +188,11 @@
             <objects>
                 <viewController id="Pya-oS-Ojv" customClass="NewsViewController" customModule="PlanetStocks" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="f5G-ai-pBV">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="567"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="IjA-6F-Ztl">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="567"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>

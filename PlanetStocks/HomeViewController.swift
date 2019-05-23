@@ -16,12 +16,13 @@ import CoreData
 class HomeViewController: UIViewController {
     var symbol = String()
     var companyName = String()
+    var symbolArray = [String]()
     //var api = "JOW9MYUHX9HWJTDE"
     var api = "9TR204K3GERJQJ33"
     //var api = "LI32913MGB8ROSV6"
     let dropDown = DropDown()
     var stocks = [Stocks]()
-    
+    var newSymbol = [String]()
     
     @IBOutlet weak var stockSearchTextField: UITextField!
 
@@ -48,20 +49,41 @@ class HomeViewController: UIViewController {
     }
     @objc func textFieldDidChange(_ textField: UITextField) {
         setUpDropDown()
+        stockSearch(input: stockSearchTextField.text!) { (resultsArr) in
+            self.dropDown.dataSource = resultsArr
+            self.dropDown.show()
+            
+        }
         
     }
     
     @IBAction func searchButtonPressed(_ sender: Any) {
-        //stockSearch(input: symbol)
+        newSymbol = symbol.components(separatedBy: " ")
+        symbolArray.append(newSymbol[0])
+        print(symbolArray[0])
+        performSegue(withIdentifier: "goToMain", sender: self)
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "goToMain" {
+            let mainVC = segue.destination as! MainViewController
+            mainVC.symb = symbolArray[0]
+            mainVC.theAPI = api
+            
+            
+            present(mainVC, animated: true, completion: nil)
+        }
+    }
+    
     @IBAction func clearButtonPressed(_ sender: Any) {
         stockSearchTextField.text = ""
     }
     
     func stockSearch(input: String, completion: @escaping ([String]) ->()) {
         var resultsArray = [String]()
+        
         let url = URL(string: "https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=\(stockSearchTextField.text!)&apikey=\(api)")!
-        //print(url)
+        
         Alamofire.request(url).responseJSON { (response) in
             if let jsonValue = response.result.value {
                 let json = JSON(jsonValue)
@@ -70,13 +92,17 @@ class HomeViewController: UIViewController {
                     if let name = subJSON["2. name"].rawString(), let symb = subJSON["1. symbol"].rawString() {
                         self.symbol = symb
                         self.companyName = name
-                        let result = "\(symb)"
+                        let result = "\(symb) - \(name)"
+                        //self.symbolArray.append(symb)
                         resultsArray.append(result)
                     }
                 }
+                
             }
             completion(resultsArray)
+            
         }
+        
         
     }
     func setUpDropDown() {
@@ -86,17 +112,13 @@ class HomeViewController: UIViewController {
         dropDown.dismissMode = .onTap
         DropDown.appearance().backgroundColor = UIColor(white: 1, alpha: 0.8)
         dropDown.selectionAction = { [unowned self] (index: Int, item: String) in
+            
+            self.symbol = item
             print("Selected item: \(item) at index: \(index)")
-            //            let arr = item.split(separator: " ")
-            //            let s = String(arr[0])
+
             self.stockSearchTextField.text = item
         }
-        stockSearch(input: stockSearchTextField.text!) { (resultsArr) in
-            self.dropDown.dataSource = resultsArr
-            self.dropDown.show()
-            
-            //print(resultsArr)
-        }
+        
         
     }
 
@@ -108,6 +130,7 @@ class HomeViewController: UIViewController {
         PersistanceService.saveContext()
         stocks.append(savedStocks)
         myStocksTableView.reloadData()
+        
     }
     
 
@@ -131,7 +154,7 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = myStocksTableView.dequeueReusableCell(withIdentifier: "stockCell") as! MyStockCell
-        cell.companyName.text = stocks[indexPath.row].company
+        //cell.companyName.text = stocks[indexPath.row].company
         cell.stockSymbol.text = stocks[indexPath.row].symbol
         
         return cell

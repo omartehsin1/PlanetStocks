@@ -14,7 +14,7 @@
 		074C1B63229444830020E1A6 /* NewsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 074C1B62229444820020E1A6 /* NewsViewController.swift */; };
 		074C1B6522944F850020E1A6 /* StockChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 074C1B6422944F850020E1A6 /* StockChartViewController.swift */; };
 		07C2CD04228DC7BC00758CE7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07C2CD03228DC7BC00758CE7 /* AppDelegate.swift */; };
-		07C2CD06228DC7BC00758CE7 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07C2CD05228DC7BC00758CE7 /* ViewController.swift */; };
+		07C2CD06228DC7BC00758CE7 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07C2CD05228DC7BC00758CE7 /* MainViewController.swift */; };
 		07C2CD09228DC7BC00758CE7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 07C2CD07228DC7BC00758CE7 /* Main.storyboard */; };
 		07C2CD0C228DC7BC00758CE7 /* PlanetStocks.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 07C2CD0A228DC7BC00758CE7 /* PlanetStocks.xcdatamodeld */; };
 		07C2CD0E228DC7BE00758CE7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 07C2CD0D228DC7BE00758CE7 /* Assets.xcassets */; };
@@ -43,7 +43,7 @@
 		074C1B6422944F850020E1A6 /* StockChartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockChartViewController.swift; sourceTree = "<group>"; };
 		07C2CD00228DC7BC00758CE7 /* PlanetStocks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PlanetStocks.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		07C2CD03228DC7BC00758CE7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		07C2CD05228DC7BC00758CE7 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		07C2CD05228DC7BC00758CE7 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		07C2CD08228DC7BC00758CE7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		07C2CD0B228DC7BC00758CE7 /* PlanetStocks.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PlanetStocks.xcdatamodel; sourceTree = "<group>"; };
 		07C2CD0D228DC7BE00758CE7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -112,7 +112,7 @@
 			children = (
 				074C1B6122930FE20020E1A6 /* Models */,
 				07C2CD03228DC7BC00758CE7 /* AppDelegate.swift */,
-				07C2CD05228DC7BC00758CE7 /* ViewController.swift */,
+				07C2CD05228DC7BC00758CE7 /* MainViewController.swift */,
 				074C1B6422944F850020E1A6 /* StockChartViewController.swift */,
 				074C1B5F228F229F0020E1A6 /* WebServices.swift */,
 				07C2CD07228DC7BC00758CE7 /* Main.storyboard */,
@@ -338,7 +338,7 @@
 			files = (
 				074C1B60228F229F0020E1A6 /* WebServices.swift in Sources */,
 				07C2CD0C228DC7BC00758CE7 /* PlanetStocks.xcdatamodeld in Sources */,
-				07C2CD06228DC7BC00758CE7 /* ViewController.swift in Sources */,
+				07C2CD06228DC7BC00758CE7 /* MainViewController.swift in Sources */,
 				073CA5402295A2240051A4C2 /* HomeViewController.swift in Sources */,
 				073CA5422295B09E0051A4C2 /* PersistanceService.swift in Sources */,
 				074C1B63229444830020E1A6 /* NewsViewController.swift in Sources */,

@@ -19,6 +19,7 @@ class NewsViewController: UIViewController {
     var dateArray = [String]()
     //var articleDict : [String : Any] = [:]
     var theInput = String()
+    var stockVC = StockChartViewController()
     
     var stockChartVC = StockChartViewController()
     
@@ -26,19 +27,9 @@ class NewsViewController: UIViewController {
         super.viewDidLoad()
         newsTableView.delegate = self
         newsTableView.dataSource = self
-        //pmew5pipmigx109vcailn67fmvgcirgwzgbznvq3
-        // https://stocknewsapi.com/api/v1?tickers=(TICKER)&items=10&fallback=true&token=(API)
-        
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        theInput = "TSLA"
-        
-        
-        
-        
         getNews(input: theInput)
     }
+
     
     func getNews(input: String) {
         
@@ -77,6 +68,7 @@ class NewsViewController: UIViewController {
         
         
     }
+
     
     
     
@@ -128,7 +120,7 @@ extension NewsViewController: UITableViewDelegate, UITableViewDataSource {
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
         }
     }
-    
+
     
 }
 
