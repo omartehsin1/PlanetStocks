@@ -7,11 +7,10 @@
 //
 
 import UIKit
-import DropDown
-import Alamofire
-import SwiftyJSON
-import Charts
+
+
 class MainViewController: UIViewController {
+    var homeVC = HomeViewController()
     var symb = String()
     var theAPI = String()
 
@@ -19,10 +18,6 @@ class MainViewController: UIViewController {
         super.viewDidLoad()
         self.navigationItem.title = symb
         print("The symbol is: \(symb)")
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
     }
 
     
@@ -61,11 +56,11 @@ class MainViewController: UIViewController {
             let stockChartVC = segue.destination as! StockChartViewController
             stockChartVC.symb = symb
             stockChartVC.theAPI = theAPI
-            present(stockChartVC, animated: true, completion: nil)
+            //present(stockChartVC, animated: true, completion: nil)
         } else if segue.identifier == "toNewsVC" {
             let newsVC = segue.destination as! NewsViewController
             newsVC.theInput = symb
-            present(newsVC, animated: true, completion: nil)
+            //present(newsVC, animated: true, completion: nil)
         }
         
         

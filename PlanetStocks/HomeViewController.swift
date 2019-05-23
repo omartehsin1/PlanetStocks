@@ -17,6 +17,7 @@ class HomeViewController: UIViewController {
     var symbol = String()
     var companyName = String()
     var symbolArray = [String]()
+    var theSymbol = String()
     //var api = "JOW9MYUHX9HWJTDE"
     var api = "9TR204K3GERJQJ33"
     //var api = "LI32913MGB8ROSV6"
@@ -59,19 +60,24 @@ class HomeViewController: UIViewController {
     
     @IBAction func searchButtonPressed(_ sender: Any) {
         newSymbol = symbol.components(separatedBy: " ")
+//        print(newSymbol)
         symbolArray.append(newSymbol[0])
-        print(symbolArray[0])
+        theSymbol = newSymbol[0]
+        
         performSegue(withIdentifier: "goToMain", sender: self)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "goToMain" {
             let mainVC = segue.destination as! MainViewController
-            mainVC.symb = symbolArray[0]
+
+            mainVC.symb = theSymbol
             mainVC.theAPI = api
             
-            
-            present(mainVC, animated: true, completion: nil)
+            print("Prepare for segue symbol is: \(theSymbol)")
+
+
+            //present(mainVC, animated: true, completion: nil)
         }
     }
     
@@ -93,7 +99,7 @@ class HomeViewController: UIViewController {
                         self.symbol = symb
                         self.companyName = name
                         let result = "\(symb) - \(name)"
-                        //self.symbolArray.append(symb)
+                        
                         resultsArray.append(result)
                     }
                 }
@@ -113,6 +119,7 @@ class HomeViewController: UIViewController {
         DropDown.appearance().backgroundColor = UIColor(white: 1, alpha: 0.8)
         dropDown.selectionAction = { [unowned self] (index: Int, item: String) in
             
+            
             self.symbol = item
             print("Selected item: \(item) at index: \(index)")
 
@@ -131,6 +138,10 @@ class HomeViewController: UIViewController {
         stocks.append(savedStocks)
         myStocksTableView.reloadData()
         
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        stockSearchTextField.text = ""
     }
     
 

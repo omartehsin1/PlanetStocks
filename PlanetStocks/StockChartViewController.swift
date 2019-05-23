@@ -33,6 +33,14 @@ class StockChartViewController: UIViewController {
     //var api = "LI32913MGB8ROSV6"
     override func viewDidLoad() {
         super.viewDidLoad()
+        stockPrice(input: symb, api: theAPI)
+        for key in theResultsArray.keys.sorted(by: <) {
+            let price = Double(theResultsArray[key]!)!
+            let volume = Double(theVolumeArray[key]!)!
+            stockPrice.append(price)
+            vol.append(volume)
+            theDates.append(key)
+        }
 
         
         // Do any additional setup after loading the view.
@@ -41,7 +49,7 @@ class StockChartViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        stockPrice(input: symb, api: theAPI)
+        convertCombined(dataEntryX: theDates, dataEntryY: stockPrice, dataEntryZ: vol)
     }
     
     
@@ -110,7 +118,7 @@ class StockChartViewController: UIViewController {
         stockChartView.xAxis.valueFormatter = IndexAxisValueFormatter(values: theDates)
         stockChartView.xAxis.granularity = 1
         //stockChartView.rightAxis.axisMaximum = stockPrice.max()!
-        stockChartView.leftAxis.axisMaximum = vol.max()!
+        //stockChartView.leftAxis.axisMaximum = vol.max()!
         
         //        let stringArray = stockPrice.map { String($0) }
         //        let otherStringArray = vol.map { String($0) }
