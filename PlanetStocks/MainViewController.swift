@@ -14,6 +14,11 @@ class MainViewController: UIViewController {
     var symb = String()
     var theAPI = String()
 
+    @IBOutlet weak var newView: UIView!
+    @IBOutlet weak var stockChartView: UIView!
+    @IBOutlet weak var portfolioView: UIView!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.title = symb
@@ -22,32 +27,38 @@ class MainViewController: UIViewController {
 
     
 
-//    @IBAction func segmentTapped(_ sender: UISegmentedControl) {
-//
-//        switch sender.selectedSegmentIndex {
-//        case 0:
-//            stockChartView.isHidden = true
-//            newView.isHidden = false
-//        case 1:
-//            stockChartView.isHidden = false
-//            newView.isHidden = true
-//        default:
-//            break
-//        }
-//
+    @IBAction func segmentTapped(_ sender: UISegmentedControl) {
+
+        switch sender.selectedSegmentIndex {
+        case 0:
+            stockChartView.isHidden = false
+            newView.isHidden = true
+            portfolioView.isHidden = true
+        case 1:
+            stockChartView.isHidden = true
+            newView.isHidden = false
+            portfolioView.isHidden = true
+        case 2:
+            stockChartView.isHidden = true
+            newView.isHidden = true
+            portfolioView.isHidden = false
+        default:
+            break
+        }
+
+    }
+    
+    
+    
+    
+    
+//    @IBAction func stockButtonPressed(_ sender: Any) {
+//        performSegue(withIdentifier: "toStockChartVC", sender: self)
 //    }
-    
-    
-    
-    
-    
-    @IBAction func stockButtonPressed(_ sender: Any) {
-        performSegue(withIdentifier: "toStockChartVC", sender: self)
-    }
-    
-    @IBAction func newsButtonPressed(_ sender: Any) {
-        performSegue(withIdentifier: "toNewsVC", sender: self)
-    }
+//    
+//    @IBAction func newsButtonPressed(_ sender: Any) {
+//        performSegue(withIdentifier: "toNewsVC", sender: self)
+//    }
     
     
     

@@ -134,13 +134,58 @@ class HomeViewController: UIViewController {
 
     @IBAction func saveTapped(_ sender: Any) {
         
-        let savedStocks = Stocks(context: PersistanceService.context)
-        savedStocks.company = companyName
-        savedStocks.symbol = symbol
-        PersistanceService.saveContext()
-        stocks.append(savedStocks)
-        myStocksTableView.reloadData()
         
+        if stockSearchTextField.text == "" {
+            let alert = UIAlertController(title: "Invalid Search", message: "Please Enter Stock", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: .cancel, handler: nil))
+            present(alert, animated: true)
+        }
+        
+        else  {
+            let alert = UIAlertController(title: companyName, message: "Enter Quantity and Share Price", preferredStyle: .alert)
+//            alert.addTextField(configurationHandler: nil)
+//            alert.addTextField(configurationHandler: nil)
+            
+            alert.addTextField { (textfield) in
+                textfield.placeholder = "Enter Share Quantity"
+                textfield.keyboardType = .decimalPad
+            }
+            
+            alert.addTextField { (textfield) in
+                textfield.placeholder = "Enter Price Per Share"
+                textfield.keyboardType = .decimalPad
+            }
+//
+//            alert.textFields![0].placeholder = "Enter Share Quantity"
+//            alert.textFields![0].keyboardType = UIKeyboardType.decimalPad
+//            alert.textFields![1].placeholder = "Enter Pice Per Share"
+//            alert.textFields![1].keyboardType = UIKeyboardType.decimalPad
+            //let share = alert.textfield![0].text
+            
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) in
+                print("Cancelled")
+            }))
+            alert.addAction(UIAlertAction(title: "Save", style: .default, handler: { (action) in
+                let savedStocks = Stocks(context: PersistanceService.context)
+                savedStocks.company = self.companyName
+                savedStocks.symbol = self.symbol
+                let shares = alert.textFields![0].text!
+                let price = alert.textFields![1].text!
+                
+                savedStocks.shares = Double(shares)!
+                savedStocks.price = Double(price)!
+                
+                let invested = savedStocks.shares * savedStocks.price
+                PersistanceService.saveContext()
+                print(invested)
+                self.stocks.append(savedStocks)
+                self.myStocksTableView.reloadData()
+            }))
+            
+            self.present(alert, animated: true)
+            
+        }
+
     }
     
     override func viewDidDisappear(_ animated: Bool) {
