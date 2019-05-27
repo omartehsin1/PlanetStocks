@@ -12,11 +12,16 @@ import Charts
 class AllocationROIViewController: UIViewController {
 
     @IBOutlet weak var pieChartView: PieChartView!
+    var shares = Double()
+    var price = Double()
+    var stocks = [String]()
+    var dollarsInvested = [Double]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        let stocks = ["MSFT", "AAPL", "FB", "TSLA"]
-        let dollarsInvested = [100.0, 223.0, 312.0, 750.0]
-        
+        //let savedStocks = Stocks()
+        //print(savedStocks.symbol!)
+        print(stocks)
         setCharts(dataPoints: stocks, values: dollarsInvested)
 
         // Do any additional setup after loading the view.

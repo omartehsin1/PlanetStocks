@@ -86,7 +86,7 @@ class NewsTableCell : UITableViewCell {
 
 extension NewsViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print(titleArray)
+        
         return titleArray.count
     }
     

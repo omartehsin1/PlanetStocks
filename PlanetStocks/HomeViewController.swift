@@ -24,6 +24,8 @@ class HomeViewController: UIViewController {
     //var api = "LI32913MGB8ROSV6"
     let dropDown = DropDown()
     var stocks = [Stocks]()
+    var stocksArray = [String]()
+    var investedArray = [Double]()
     
     var cellSymbolArray = [String]()
     
@@ -75,6 +77,8 @@ class HomeViewController: UIViewController {
             
             mainVC.symb = theSymbol
             mainVC.theAPI = api
+            mainVC.theStocksArray = stocksArray
+            mainVC.theInvestedArray = investedArray
             
         }
         else if segue.identifier == "goToMainFromCell" {
@@ -142,7 +146,7 @@ class HomeViewController: UIViewController {
         }
         
         else  {
-            let alert = UIAlertController(title: companyName, message: "Enter Quantity and Share Price", preferredStyle: .alert)
+            let alert = UIAlertController(title: symbol, message: "Enter Quantity and Share Price", preferredStyle: .alert)
 //            alert.addTextField(configurationHandler: nil)
 //            alert.addTextField(configurationHandler: nil)
             
@@ -169,6 +173,11 @@ class HomeViewController: UIViewController {
                 let savedStocks = Stocks(context: PersistanceService.context)
                 savedStocks.company = self.companyName
                 savedStocks.symbol = self.symbol
+                self.stocksArray.append(savedStocks.symbol!)
+                
+                
+                //print("Company name is: \(savedStocks.company!)")
+                //print("Symbol is: \(savedStocks.symbol!)")
                 let shares = alert.textFields![0].text!
                 let price = alert.textFields![1].text!
                 
@@ -176,9 +185,11 @@ class HomeViewController: UIViewController {
                 savedStocks.price = Double(price)!
                 
                 let invested = savedStocks.shares * savedStocks.price
+                self.investedArray.append(invested)
+                
                 PersistanceService.saveContext()
-                print(invested)
                 self.stocks.append(savedStocks)
+                print(self.stocks)
                 self.myStocksTableView.reloadData()
             }))
             
@@ -215,6 +226,7 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
         let cell = myStocksTableView.dequeueReusableCell(withIdentifier: "stockCell") as! MyStockCell
         //cell.companyName.text = stocks[indexPath.row].company
         cell.stockSymbol.text = stocks[indexPath.row].symbol
+        
         
         return cell
     }

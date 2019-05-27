@@ -13,6 +13,8 @@ class MainViewController: UIViewController {
     var homeVC = HomeViewController()
     var symb = String()
     var theAPI = String()
+    var theStocksArray = [String]()
+    var theInvestedArray = [Double]()
 
     @IBOutlet weak var newView: UIView!
     @IBOutlet weak var stockChartView: UIView!
@@ -22,7 +24,10 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.title = symb
-        print("The symbol is: \(symb)")
+        //print("The symbol is: \(symb)")
+        stockChartView.isHidden = false
+        newView.isHidden = true
+        portfolioView.isHidden = true
     }
 
     
@@ -72,6 +77,11 @@ class MainViewController: UIViewController {
             let newsVC = segue.destination as! NewsViewController
             newsVC.theInput = symb
             //present(newsVC, animated: true, completion: nil)
+        } else if segue.identifier == "toAllocationVC" {
+            let roiVC = segue.destination as! AllocationROIViewController
+            roiVC.stocks = theStocksArray
+            roiVC.dollarsInvested = theInvestedArray
+
         }
         
         
