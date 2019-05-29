@@ -71,6 +71,7 @@ class HomeViewController: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let savedStocks = Stocks(context: PersistanceService.context)
         let mainVC = segue.destination as! MainViewController
         if segue.identifier == "goToMain" {
             
@@ -192,11 +193,9 @@ class HomeViewController: UIViewController {
                 let shares = alert.textFields![0].text!
                 let price = alert.textFields![1].text!
                 
-                savedStocks.shares = Double(shares)!
-                savedStocks.price = Double(price)!
-                
-                let invested = savedStocks.shares * savedStocks.price
-                self.investedArray.append(invested)
+
+                savedStocks.invested = Double(shares)! * Double(price)!
+                self.investedArray.append(savedStocks.invested)
                 
                 
   
@@ -228,7 +227,8 @@ class HomeViewController: UIViewController {
             self.present(alert, animated: true)
             
         }
-        
+        let savedStocks = Stocks(context: PersistanceService.context)
+        print(savedStocks.invested)
 
     }
     
@@ -257,14 +257,11 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = myStocksTableView.dequeueReusableCell(withIdentifier: "stockCell") as! MyStockCell
-        //cell.companyName.text = stocks[indexPath.row].company
         cell.stockSymbol.text = stocks[indexPath.row].symbol
         
         
         cell.stockPrice.text = stocks[indexPath.row].closePrice
-        //var percentageString = cell.percentChange.text
-        
-        //percentageString = "\(stocks[indexPath.row].difference ?? "")%"
+
         
         cell.percentChange.text = "\(stocks[indexPath.row].difference ?? "")%"
         

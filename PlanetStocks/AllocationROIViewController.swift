@@ -19,6 +19,7 @@ class AllocationROIViewController: UIViewController {
     var theStocks = [String]()
     var theDollarInvested = [Double]()
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         //let savedStocks = Stocks()
