@@ -19,6 +19,8 @@ class HomeViewController: UIViewController {
     var symbolArray = [String]()
     var theSymbol = String()
     var newCellSymbol = String()
+    
+    var lastPrice = String()
     //var api = "JOW9MYUHX9HWJTDE"
     var api = "9TR204K3GERJQJ33"
     //var api = "LI32913MGB8ROSV6"
@@ -26,6 +28,8 @@ class HomeViewController: UIViewController {
     var stocks = [Stocks]()
     var stocksArray = [String]()
     var investedArray = [Double]()
+    var theClosePriceDict : [String : String] = [:]
+    var closePriceArray = [String]()
     
     var cellSymbolArray = [String]()
     
@@ -64,9 +68,8 @@ class HomeViewController: UIViewController {
     
     @IBAction func searchButtonPressed(_ sender: Any) {
         let newSymbol = symbol.components(separatedBy: " ")
-//        print(newSymbol)
-        //symbolArray.append(newSymbol[0])
         theSymbol = newSymbol[0]
+        print("The symbol after search is \(theSymbol)")
         
         performSegue(withIdentifier: "goToMain", sender: self)
     }
@@ -102,7 +105,7 @@ class HomeViewController: UIViewController {
                 let json = JSON(jsonValue)
                 
                 for(_, subJSON) in json["bestMatches"] {
-                    if let name = subJSON["2. name"].rawString(), let symb = subJSON["1. symbol"].rawString() {
+                    if let name = subJSON["2. name"].rawString(), let symb = subJSON["1. symbol"].rawString(), let theLastPrice = subJSON["4. close"].rawString() {
                         self.symbol = symb
                         self.companyName = name
                         let result = "\(symb) - \(name)"
@@ -118,6 +121,9 @@ class HomeViewController: UIViewController {
         
         
     }
+    
+    
+    
     func setUpDropDown() {
         dropDown.anchorView = stockSearchTextField
         dropDown.bottomOffset = CGPoint(x: 0, y: stockSearchTextField.bounds.height)
@@ -132,7 +138,26 @@ class HomeViewController: UIViewController {
 
             self.stockSearchTextField.text = item
         }
+    }
+    func lastStockPrice(input: String, api: String) {
+        let url = URL(string: "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=\(input)&apikey=\(api)")!
         
+        print(url)
+        let data = NSData(contentsOf: url)
+        
+        do {
+            let results = try JSON(data: data! as Data)
+            for (key, subJSON) in results["Time Series (Daily)"] {
+                let close = subJSON["4. close"].rawString()
+                theClosePriceDict[key] = close
+  
+            }
+            
+            
+            
+        } catch  {
+            print("ERROR")
+        }
         
     }
 
@@ -159,12 +184,7 @@ class HomeViewController: UIViewController {
                 textfield.placeholder = "Enter Price Per Share"
                 textfield.keyboardType = .decimalPad
             }
-//
-//            alert.textFields![0].placeholder = "Enter Share Quantity"
-//            alert.textFields![0].keyboardType = UIKeyboardType.decimalPad
-//            alert.textFields![1].placeholder = "Enter Pice Per Share"
-//            alert.textFields![1].keyboardType = UIKeyboardType.decimalPad
-            //let share = alert.textfield![0].text
+
             
             alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) in
                 print("Cancelled")
@@ -189,13 +209,23 @@ class HomeViewController: UIViewController {
                 
                 PersistanceService.saveContext()
                 self.stocks.append(savedStocks)
-                print(self.stocks)
+  
+                let aSymbol = self.symbol.components(separatedBy: " ")
+                let newSymbol = aSymbol[0]
+                self.lastStockPrice(input: newSymbol, api: self.api)
+                for key in self.theClosePriceDict.keys.sorted(by: >) {
+                    let closePrice = self.theClosePriceDict[key]!
+                    self.closePriceArray.append(closePrice)
+                }
+                
+                
                 self.myStocksTableView.reloadData()
             }))
             
             self.present(alert, animated: true)
             
         }
+        
 
     }
     
@@ -226,6 +256,7 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
         let cell = myStocksTableView.dequeueReusableCell(withIdentifier: "stockCell") as! MyStockCell
         //cell.companyName.text = stocks[indexPath.row].company
         cell.stockSymbol.text = stocks[indexPath.row].symbol
+        cell.stockPrice.text = closePriceArray[0]
         
         
         return cell
@@ -255,3 +286,12 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
     
     
 }
+
+//extension HomeViewController {
+//    func reducedSymbol(stockSymbol: String) -> String {
+//        let newSymbol = stockSymbol.components(separatedBy: " ")
+//        theSymbol = newSymbol[0]
+//        return theSymbol
+//
+//    }
+//}

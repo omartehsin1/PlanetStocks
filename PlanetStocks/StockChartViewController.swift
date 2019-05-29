@@ -37,7 +37,7 @@ class StockChartViewController: UIViewController {
     //var api = "LI32913MGB8ROSV6"
     override func viewDidLoad() {
         super.viewDidLoad()
-        stockPrice(input: symb, api: theAPI)
+        searchStockPrice(input: symb, api: theAPI)
         for key in theResultsArray.keys.sorted(by: <) {
             let price = Double(theResultsArray[key]!)!
             let volume = Double(theVolumeArray[key]!)!
@@ -45,6 +45,7 @@ class StockChartViewController: UIViewController {
             vol.append(volume)
             theDates.append(key)
         }
+        
 
         
         // Do any additional setup after loading the view.
@@ -60,7 +61,7 @@ class StockChartViewController: UIViewController {
     
     
     
-    func stockPrice(input: String, api: String) {
+    func searchStockPrice(input: String, api: String) {
         let url = URL(string: "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=\(input)&apikey=\(api)")! //got an error here, find a way to only do symbol
         print(url)
         let data = NSData(contentsOf: url)
@@ -72,6 +73,7 @@ class StockChartViewController: UIViewController {
                 let volume = subJSON["5. volume"].rawString()
                 theResultsArray[key] = open
                 theVolumeArray[key] = volume
+                
                 
             }
             
