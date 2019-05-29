@@ -16,13 +16,10 @@ import CoreData
 class HomeViewController: UIViewController {
     var symbol = String()
     var companyName = String()
-    var symbolArray = [String]()
     var theSymbol = String()
     var newCellSymbol = String()
-    
-    var lastPrice = String()
-    //var api = "JOW9MYUHX9HWJTDE"
-    var api = "9TR204K3GERJQJ33"
+    var api = "JOW9MYUHX9HWJTDE"
+    //var api = "9TR204K3GERJQJ33"
     //var api = "LI32913MGB8ROSV6"
     let dropDown = DropDown()
     var stocks = [Stocks]()
@@ -31,7 +28,6 @@ class HomeViewController: UIViewController {
     var theClosePriceDict : [String : String] = [:]
     var closePriceArray = [String]()
     
-    var cellSymbolArray = [String]()
     
     @IBOutlet weak var stockSearchTextField: UITextField!
 
@@ -172,9 +168,7 @@ class HomeViewController: UIViewController {
         
         else  {
             let alert = UIAlertController(title: symbol, message: "Enter Quantity and Share Price", preferredStyle: .alert)
-//            alert.addTextField(configurationHandler: nil)
-//            alert.addTextField(configurationHandler: nil)
-            
+
             alert.addTextField { (textfield) in
                 textfield.placeholder = "Enter Share Quantity"
                 textfield.keyboardType = .decimalPad
@@ -194,10 +188,7 @@ class HomeViewController: UIViewController {
                 savedStocks.company = self.companyName
                 savedStocks.symbol = self.symbol
                 self.stocksArray.append(savedStocks.symbol!)
-                
-                
-                //print("Company name is: \(savedStocks.company!)")
-                //print("Symbol is: \(savedStocks.symbol!)")
+
                 let shares = alert.textFields![0].text!
                 let price = alert.textFields![1].text!
                 
@@ -207,17 +198,29 @@ class HomeViewController: UIViewController {
                 let invested = savedStocks.shares * savedStocks.price
                 self.investedArray.append(invested)
                 
-                PersistanceService.saveContext()
-                self.stocks.append(savedStocks)
+                
   
                 let aSymbol = self.symbol.components(separatedBy: " ")
                 let newSymbol = aSymbol[0]
                 self.lastStockPrice(input: newSymbol, api: self.api)
-                for key in self.theClosePriceDict.keys.sorted(by: >) {
-                    let closePrice = self.theClosePriceDict[key]!
-                    self.closePriceArray.append(closePrice)
+                for key in self.theClosePriceDict.keys.sorted(by: <) {
+                    savedStocks.closePrice = self.theClosePriceDict[key]!
+                    self.closePriceArray.append(savedStocks.closePrice!)
                 }
+                let slicedLastNumbers = self.closePriceArray.suffix(2)
+                let lastNumbers = Array(slicedLastNumbers)
+                let todaysClose = Double(lastNumbers[1])!
+                let yesterdaysClose = Double(lastNumbers[0])!
+                let difference = ((todaysClose - yesterdaysClose)/todaysClose) * 100
+                let truncatedNumber = difference.truncate(places: 3)
                 
+                //savedStocks.difference = String(((todaysClose - yesterdaysClose)/todaysClose) * 100)
+                savedStocks.difference = String(truncatedNumber)
+                //print("Percentage difference is : \(savedStocks.difference)%")
+                   
+
+                PersistanceService.saveContext()
+                self.stocks.append(savedStocks)
                 
                 self.myStocksTableView.reloadData()
             }))
@@ -256,8 +259,20 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
         let cell = myStocksTableView.dequeueReusableCell(withIdentifier: "stockCell") as! MyStockCell
         //cell.companyName.text = stocks[indexPath.row].company
         cell.stockSymbol.text = stocks[indexPath.row].symbol
-        cell.stockPrice.text = closePriceArray[0]
         
+        
+        cell.stockPrice.text = stocks[indexPath.row].closePrice
+        //var percentageString = cell.percentChange.text
+        
+        //percentageString = "\(stocks[indexPath.row].difference ?? "")%"
+        
+        cell.percentChange.text = "\(stocks[indexPath.row].difference ?? "")%"
+        
+        if (cell.percentChange.text?.hasPrefix("-"))! {
+            cell.percentChange.textColor = .red
+        } else {
+            cell.percentChange.textColor = .green
+        }
         
         return cell
     }
@@ -287,11 +302,10 @@ extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
     
 }
 
-//extension HomeViewController {
-//    func reducedSymbol(stockSymbol: String) -> String {
-//        let newSymbol = stockSymbol.components(separatedBy: " ")
-//        theSymbol = newSymbol[0]
-//        return theSymbol
-//
-//    }
-//}
+extension Double
+{
+    func truncate(places : Int)-> Double
+    {
+        return Double(floor(pow(10.0, Double(places)) * self)/pow(10.0, Double(places)))
+    }
+}
