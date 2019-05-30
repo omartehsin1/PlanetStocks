@@ -62,7 +62,7 @@ class StockChartViewController: UIViewController {
     
     
     func searchStockPrice(input: String, api: String) {
-        let url = URL(string: "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=\(input)&apikey=\(api)")! //got an error here, find a way to only do symbol
+        let url = URL(string: "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=\(input)&apikey=\(api)")! 
         print(url)
         let data = NSData(contentsOf: url)
         

@@ -48,18 +48,6 @@ class HomeViewController: UIViewController {
             self.myStocksTableView.reloadData()
         } catch {}
         
-        //print(stocks)
-//        let anotherFetchRequest: NSFetchRequest<Stocks> = Stocks.fetchRequest()
-//        anotherFetchRequest.predicate = NSPredicate.init(format: "id==\(0x60000270cb20)")
-//        do {
-//            let objects = try PersistanceService.context.fetch(anotherFetchRequest)
-//            for object in objects {
-//                PersistanceService.context.delete(object)
-//            }
-//            PersistanceService.saveContext()
-//        } catch {
-//            print(error)
-//        }
         
         
 
@@ -78,17 +66,20 @@ class HomeViewController: UIViewController {
     @IBAction func searchButtonPressed(_ sender: Any) {
         let newSymbol = symbol.components(separatedBy: " ")
         theSymbol = newSymbol[0]
-        print("The symbol after search is \(theSymbol)")
+        //print("The symbol after search is \(theSymbol)")
         
         performSegue(withIdentifier: "goToMain", sender: self)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let savedStocks = Stocks(context: PersistanceService.context)
         let mainVC = segue.destination as! MainViewController
         if segue.identifier == "goToMain" {
             
-            mainVC.symb = theSymbol
+            if theSymbol == "" {
+                mainVC.symb = newCellSymbol
+            } else {
+                mainVC.symb = theSymbol
+            }
             mainVC.theAPI = api
             mainVC.theStocksArray = stocksArray
             mainVC.theInvestedArray = investedArray
