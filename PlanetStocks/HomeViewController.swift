@@ -48,6 +48,19 @@ class HomeViewController: UIViewController {
             self.myStocksTableView.reloadData()
         } catch {}
         
+        //print(stocks)
+//        let anotherFetchRequest: NSFetchRequest<Stocks> = Stocks.fetchRequest()
+//        anotherFetchRequest.predicate = NSPredicate.init(format: "id==\(0x60000270cb20)")
+//        do {
+//            let objects = try PersistanceService.context.fetch(anotherFetchRequest)
+//            for object in objects {
+//                PersistanceService.context.delete(object)
+//            }
+//            PersistanceService.saveContext()
+//        } catch {
+//            print(error)
+//        }
+        
         
 
         // Do any additional setup after loading the view.
@@ -208,14 +221,15 @@ class HomeViewController: UIViewController {
                 }
                 let slicedLastNumbers = self.closePriceArray.suffix(2)
                 let lastNumbers = Array(slicedLastNumbers)
+                print(lastNumbers)
                 let todaysClose = Double(lastNumbers[1])!
                 let yesterdaysClose = Double(lastNumbers[0])!
                 let difference = ((todaysClose - yesterdaysClose)/todaysClose) * 100
                 let truncatedNumber = difference.truncate(places: 3)
                 
-                //savedStocks.difference = String(((todaysClose - yesterdaysClose)/todaysClose) * 100)
+                
                 savedStocks.difference = String(truncatedNumber)
-                //print("Percentage difference is : \(savedStocks.difference)%")
+                
                    
 
                 PersistanceService.saveContext()
@@ -227,8 +241,7 @@ class HomeViewController: UIViewController {
             self.present(alert, animated: true)
             
         }
-        let savedStocks = Stocks(context: PersistanceService.context)
-        print(savedStocks.invested)
+        
 
     }
     
@@ -252,6 +265,7 @@ class MyStockCell : UITableViewCell {
 
 extension HomeViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        print(stocks.count)
         return stocks.count
     }
     
