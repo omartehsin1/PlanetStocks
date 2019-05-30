@@ -25,6 +25,7 @@ class HomeViewController: UIViewController {
     var stocks = [Stocks]()
     var stocksArray = [String]()
     var investedArray = [Double]()
+    var closePriceCostArray = [Double]()
     var theClosePriceDict : [String : String] = [:]
     var closePriceArray = [String]()
     
@@ -197,8 +198,12 @@ class HomeViewController: UIViewController {
                 let shares = alert.textFields![0].text!
                 let price = alert.textFields![1].text!
                 
+                savedStocks.shares = Double(shares)!
+                savedStocks.price = Double(price)!
+                
+                
 
-                savedStocks.invested = Double(shares)! * Double(price)!
+                savedStocks.invested = savedStocks.shares * savedStocks.price
                 self.investedArray.append(savedStocks.invested)
                 
                 
@@ -208,7 +213,9 @@ class HomeViewController: UIViewController {
                 self.lastStockPrice(input: newSymbol, api: self.api)
                 for key in self.theClosePriceDict.keys.sorted(by: <) {
                     savedStocks.closePrice = self.theClosePriceDict[key]!
+                    //savedStocks.closePriceCost = Double(self.theClosePriceDict[key]!)!
                     self.closePriceArray.append(savedStocks.closePrice!)
+                    //self.closePriceCostArray.append(savedStocks.closePriceCost)
                 }
                 let slicedLastNumbers = self.closePriceArray.suffix(2)
                 let lastNumbers = Array(slicedLastNumbers)
@@ -218,7 +225,9 @@ class HomeViewController: UIViewController {
                 let difference = ((todaysClose - yesterdaysClose)/todaysClose) * 100
                 let truncatedNumber = difference.truncate(places: 3)
                 
-                
+                //print(self.closePriceCostArray)
+                savedStocks.closePriceCost = Double(shares)! * todaysClose
+                print(savedStocks.closePriceCost)
                 savedStocks.difference = String(truncatedNumber)
                 
                    

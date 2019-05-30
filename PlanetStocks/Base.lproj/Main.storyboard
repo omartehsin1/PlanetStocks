@@ -289,15 +289,21 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="R8E-pQ-8bu" customClass="PieChartView" customModule="Charts">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="565"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="275"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MzP-pd-J9c" customClass="LineChartView" customModule="Charts">
+                                <rect key="frame" x="0.0" y="283" width="375" height="282"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.63529413940000001" green="0.32941177490000001" blue="0.49019607900000001" alpha="1" colorSpace="deviceRGB"/>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="hrL-kk-3Sy"/>
                     </view>
                     <connections>
+                        <outlet property="lineChartView" destination="MzP-pd-J9c" id="Rjl-2f-yoJ"/>
                         <outlet property="pieChartView" destination="R8E-pQ-8bu" id="qFM-3C-CSs"/>
                     </connections>
                 </viewController>

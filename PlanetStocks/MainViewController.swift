@@ -79,8 +79,8 @@ class MainViewController: UIViewController {
             //present(newsVC, animated: true, completion: nil)
         } else if segue.identifier == "toAllocationVC" {
             let roiVC = segue.destination as! AllocationROIViewController
-            roiVC.stocks = theStocksArray
-            roiVC.dollarsInvested = theInvestedArray
+            //roiVC.stocks = theStocksArray
+           // roiVC.dollarsInvested = theInvestedArray
 
         }
         

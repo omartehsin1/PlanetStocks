@@ -2,6 +2,7 @@
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14490.99" systemVersion="18E226" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Stocks" representedClassName="Stocks" syncable="YES" codeGenerationType="class">
         <attribute name="closePrice" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="closePriceCost" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="company" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="difference" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="invested" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
@@ -10,6 +11,6 @@
         <attribute name="symbol" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Stocks" positionX="-63" positionY="-18" width="128" height="150"/>
+        <element name="Stocks" positionX="-63" positionY="-18" width="128" height="165"/>
     </elements>
 </model>

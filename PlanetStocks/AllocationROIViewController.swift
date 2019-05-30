@@ -13,13 +13,12 @@ import CoreData
 class AllocationROIViewController: UIViewController {
 
     @IBOutlet weak var pieChartView: PieChartView!
-    var shares = Double()
-    var price = Double()
-    var stocks = [String]()
-    var dollarsInvested = [Double]()
+    @IBOutlet weak var lineChartView: LineChartView!
+    
+    
     var otherStocks = [String]()
     var otherDollarsInvested = [Double]()
-    var theStocks = [String]()
+    var theStocks = [Double]()
     var theDollarInvested = [Double]()
     var savedStocks = [Stocks]()
 
@@ -39,14 +38,27 @@ class AllocationROIViewController: UIViewController {
             otherDollarsInvested.append(theSavedStocks.invested)
             
             otherStocks.append(theSavedStocks.symbol!)
+            theStocks.append(theSavedStocks.closePriceCost)
 
         }
         
+        //let closePriceStringToDouble = theStocks.compactMap(Double.init)
+        let theSumOfClosePrice = theStocks.reduce(0, +)
+        //print(theSumOfClosePrice)
         
         let newDollarArray = otherDollarsInvested.filter {$0 != 0.0}
+        
+        let sumOfInitialInvestment = newDollarArray.reduce(0, +)
+        //print(sumOfInitialInvestment)
+        
+        let ROI = (theSumOfClosePrice - sumOfInitialInvestment) / sumOfInitialInvestment
+        print(ROI)
+        
+        //roi: gainfrominvestment - costofinvestment / costofinvestment
 
 
         setCharts(dataPoints: otherStocks, values: newDollarArray)
+        setLineChart(dataPoints: otherStocks, values: newDollarArray)
 
     }
     
@@ -54,18 +66,12 @@ class AllocationROIViewController: UIViewController {
         var dataEntries : [PieChartDataEntry] = [PieChartDataEntry]()
         
         for i in 0 ..< values.count {
-            //let dataEntry = PieChartDataEntry(value: values[i], data: i)
             let dataEntry = PieChartDataEntry(value: values[i], label: dataPoints[i])
-//            for stockSymbol in dataPoints {
-//                dataEntry.label = stockSymbol
-//            }
+            
             dataEntries.append(dataEntry)
         }
         
         let pieChartDataSet = PieChartDataSet(entries: dataEntries, label: nil)
-        
-
-        
         let data = PieChartData(dataSet: pieChartDataSet)
         
         pieChartView.data = data
@@ -73,7 +79,7 @@ class AllocationROIViewController: UIViewController {
         
         var colours: [UIColor] = []
         
-        for i in 0..<values.count {
+        for _ in 0..<values.count {
             let red = Double(arc4random_uniform(256))
             let green = Double(arc4random_uniform(256))
             let blue = Double(arc4random_uniform(256))
@@ -83,6 +89,31 @@ class AllocationROIViewController: UIViewController {
         }
         
         pieChartDataSet.colors = colours
+        
+        
+        //let lineChartDataSet = LineChartDataSet(entries: dataEntries, label: nil)
+        
+    }
+    func setLineChart(dataPoints: [String], values: [Double]) {
+        var dataEntries = [ChartDataEntry]()
+        for i in 0 ..< values.count {
+            let dataEntry = ChartDataEntry(x: Double(i), y: values[i])
+            dataEntries.append(dataEntry)
+        }
+        let theLine = LineChartDataSet(entries: dataEntries, label: nil)
+        let data = LineChartData(dataSet: theLine)
+        lineChartView.data = data
+        var colours: [UIColor] = []
+        
+        for _ in 0..<values.count {
+            let red = Double(arc4random_uniform(256))
+            let green = Double(arc4random_uniform(256))
+            let blue = Double(arc4random_uniform(256))
+            
+            let colour = UIColor(red: CGFloat(red/255), green: CGFloat(green/255), blue: CGFloat(blue/255), alpha: 1)
+            colours.append(colour)
+        }
+        theLine.colors = colours
     }
 
 }
