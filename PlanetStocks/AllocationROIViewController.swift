@@ -22,15 +22,12 @@ class AllocationROIViewController: UIViewController {
     var theStocks = [String]()
     var theDollarInvested = [Double]()
     var savedStocks = [Stocks]()
-    
+
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //let savedStocks = Stocks()
-        //print(savedStocks.symbol!)
-//        theStocks = ["AAPL", "MSFT", "FB"]
-//        theDollarInvested = [100.0, 212.34, 453.45]
-        //0x60000270cb20
+
         
         let fetchRequest: NSFetchRequest<Stocks> = Stocks.fetchRequest()
         do {
@@ -41,18 +38,15 @@ class AllocationROIViewController: UIViewController {
         for theSavedStocks in savedStocks {
             otherDollarsInvested.append(theSavedStocks.invested)
             
-            //otherStocks.append(theSavedStocks.symbol!)
-            //print("The ID is: \(theSavedStocks.objectID)")
+            otherStocks.append(theSavedStocks.symbol!)
+
         }
         
         
-        
-        print(otherDollarsInvested)
         let newDollarArray = otherDollarsInvested.filter {$0 != 0.0}
-        print(newDollarArray)
-        //print(savedStocks)
 
-        setCharts(dataPoints: stocks, values: newDollarArray)
+
+        setCharts(dataPoints: otherStocks, values: newDollarArray)
 
     }
     
@@ -60,18 +54,22 @@ class AllocationROIViewController: UIViewController {
         var dataEntries : [PieChartDataEntry] = [PieChartDataEntry]()
         
         for i in 0 ..< values.count {
-            let dataEntry = PieChartDataEntry(value: values[i], data: i)
+            //let dataEntry = PieChartDataEntry(value: values[i], data: i)
+            let dataEntry = PieChartDataEntry(value: values[i], label: dataPoints[i])
+//            for stockSymbol in dataPoints {
+//                dataEntry.label = stockSymbol
+//            }
             dataEntries.append(dataEntry)
-            
         }
         
-        let pieChartDataSet = PieChartDataSet(entries: dataEntries, label: "Allocation")
+        let pieChartDataSet = PieChartDataSet(entries: dataEntries, label: nil)
         
-//        print(dataEntries)
+
         
         let data = PieChartData(dataSet: pieChartDataSet)
         
         pieChartView.data = data
+
         
         var colours: [UIColor] = []
         
