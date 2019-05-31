@@ -54,8 +54,8 @@ class StockChartViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        //convertCombined(dataEntryX: theDates, dataEntryY: stockPrice, dataEntryZ: vol)
-        generateLineData()
+        stockChartView.animate(xAxisDuration: 2.0, yAxisDuration: 2.0, easingOption: .easeInSine)
+        generateLineData(datapoints: theDates, values: stockPrice)
     }
     
     
@@ -155,34 +155,45 @@ class StockChartViewController: UIViewController {
     
     
     
-    func generateLineData() {
+    func generateLineData(datapoints: [String], values: [Double]) {
         
         
         var lineChartEntry = [ChartDataEntry]()
-        for i in 0 ..< stockPrice.count {
-            let value = ChartDataEntry(x: Double(i), y: stockPrice[i])
+        for i in 0 ..< values.count {
+            let value = ChartDataEntry(x: Double(i), y: values[i])
             lineChartEntry.append(value)
         }
         
         let line1 = LineChartDataSet(entries: lineChartEntry, label: "Price")
-        line1.colors = [NSUIColor.blue]
-        line1.circleRadius = 1
-        line1.fillAlpha = 1
-        line1.drawFilledEnabled = true
-        line1.fillColor = .blue
-        
-        
-        
         let data = LineChartData()
         data.addDataSet(line1)
+        line1.colors = [NSUIColor.blue]
+        line1.circleRadius = 1
+        //line1.fillAlpha = 1
+        //line1.drawFilledEnabled = true
+        //line1.fillColor = .blue
         
+        //Gradient Fill
+        let gradientColors = [UIColor.blue.cgColor, UIColor.clear.cgColor] as CFArray
+        let colorLocations: [CGFloat] = [1.0, 0.0]
+        guard let gradient = CGGradient.init(colorsSpace: CGColorSpaceCreateDeviceRGB(), colors: gradientColors, locations: colorLocations) else { print("gradient error"); return }
+        line1.fill = Fill.fillWithLinearGradient(gradient, angle: 90.0)
+        line1.drawFilledEnabled = true
+
+        
+        
+        //Axes SetUp
+        stockChartView.xAxis.valueFormatter = IndexAxisValueFormatter(values: datapoints)
+        stockChartView.xAxis.labelPosition = .bottom
+        stockChartView.xAxis.drawGridLinesEnabled = false
+        stockChartView.chartDescription?.enabled = false
+        stockChartView.legend.enabled = true
+        stockChartView.rightAxis.enabled = false
+        stockChartView.leftAxis.drawGridLinesEnabled = false
+        stockChartView.leftAxis.drawLabelsEnabled = true
         
         stockChartView.data = data
-        stockChartView.chartDescription?.text = "Stock Price"
-        stockChartView.xAxis.valueFormatter = IndexAxisValueFormatter(values: theDates)
-        stockChartView.animate(xAxisDuration: 2.0, yAxisDuration: 2.0)
-        //        stockChartView.animate(xAxisDuration: 2, yAxisDuration: 2, easingOption: ChartEasingOption.easeInBounce)
-        stockChartView.leftAxis.labelTextColor = .white
+
     }
     
     

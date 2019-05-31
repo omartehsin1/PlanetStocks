@@ -42,23 +42,23 @@ class AllocationROIViewController: UIViewController {
 
         }
         
-        //let closePriceStringToDouble = theStocks.compactMap(Double.init)
+        
         let theSumOfClosePrice = theStocks.reduce(0, +)
-        //print(theSumOfClosePrice)
+        
         
         let newDollarArray = otherDollarsInvested.filter {$0 != 0.0}
         
         let sumOfInitialInvestment = newDollarArray.reduce(0, +)
-        //print(sumOfInitialInvestment)
         
-        let ROI = (theSumOfClosePrice - sumOfInitialInvestment) / sumOfInitialInvestment
+        
+        let ROI = [((theSumOfClosePrice - sumOfInitialInvestment) / sumOfInitialInvestment) * 100]
         print(ROI)
         
-        //roi: gainfrominvestment - costofinvestment / costofinvestment
+        let otherLine = [sumOfInitialInvestment, theSumOfClosePrice]
 
 
         setCharts(dataPoints: otherStocks, values: newDollarArray)
-        setLineChart(dataPoints: otherStocks, values: newDollarArray)
+        setLineChart(dataPoints: otherStocks, values: otherLine)
 
     }
     
@@ -103,6 +103,9 @@ class AllocationROIViewController: UIViewController {
         let theLine = LineChartDataSet(entries: dataEntries, label: nil)
         let data = LineChartData(dataSet: theLine)
         lineChartView.data = data
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd MMM YY"
+
         var colours: [UIColor] = []
         
         for _ in 0..<values.count {
@@ -114,6 +117,31 @@ class AllocationROIViewController: UIViewController {
             colours.append(colour)
         }
         theLine.colors = colours
+    }
+    func setOtherLineChart(dataPoints: [String], values: [Double]) {
+        var dataEntries = [ChartDataEntry]()
+        for i in 0 ..< values.count {
+            let dataEntry = ChartDataEntry(x: Double(i), y: values[i])
+            dataEntries.append(dataEntry)
+        }
+        let theLine = LineChartDataSet(entries: dataEntries, label: nil)
+        let data = LineChartData(dataSet: theLine)
+        lineChartView.data = data
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd MMM YY"
+        
+        var colours: [UIColor] = []
+        
+        for _ in 0..<values.count {
+            let red = Double(arc4random_uniform(256))
+            let green = Double(arc4random_uniform(256))
+            let blue = Double(arc4random_uniform(256))
+            
+            let colour = UIColor(red: CGFloat(red/255), green: CGFloat(green/255), blue: CGFloat(blue/255), alpha: 1)
+            colours.append(colour)
+        }
+        theLine.colors = colours
+        
     }
 
 }

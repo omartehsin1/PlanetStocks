@@ -28,7 +28,10 @@ class HomeViewController: UIViewController {
     var closePriceCostArray = [Double]()
     var theClosePriceDict : [String : String] = [:]
     var closePriceArray = [String]()
-    
+    let datePicker = UIDatePicker()
+    let toolBar = UIToolbar()
+    let dateFormatter = DateFormatter()
+    var dateString = String()
     
     @IBOutlet weak var stockSearchTextField: UITextField!
 
@@ -166,6 +169,9 @@ class HomeViewController: UIViewController {
     @IBAction func saveTapped(_ sender: Any) {
         
         
+        
+        
+        
         if stockSearchTextField.text == "" {
             let alert = UIAlertController(title: "Invalid Search", message: "Please Enter Stock", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Ok", style: .cancel, handler: nil))
@@ -184,6 +190,16 @@ class HomeViewController: UIViewController {
                 textfield.placeholder = "Enter Price Per Share"
                 textfield.keyboardType = .decimalPad
             }
+            
+            alert.addTextField { (textfield) in
+                textfield.placeholder = "Enter Date Purchased"
+                self.selectDate()
+                textfield.inputView = self.datePicker
+                textfield.inputAccessoryView = self.toolBar
+                textfield.text = self.dateString
+                print(self.dateString)
+            }
+            
 
             
             alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { (action) in
@@ -244,7 +260,31 @@ class HomeViewController: UIViewController {
         
 
     }
+    func selectDate() {
+        
+        
+        
+        toolBar.sizeToFit()
+        let doneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(doneClicked))
+        
+        toolBar.setItems([doneButton], animated: false)
+        toolBar.isUserInteractionEnabled = true
+        toolBar.isHidden = false
+        
+    }
     
+    @objc func doneClicked() {
+        datePicker.datePickerMode = .date
+        //datePicker.addta
+        
+        dateFormatter.dateFormat = "dd MMMM yyyy"
+        let selectedDate = dateFormatter.string(from: datePicker.date)
+        dateString = selectedDate
+        //print(selectedDate)
+        datePicker.isHidden = true
+        toolBar.isHidden = true
+    }
+
     override func viewDidDisappear(_ animated: Bool) {
         stockSearchTextField.text = ""
     }
@@ -320,3 +360,5 @@ extension Double
         return Double(floor(pow(10.0, Double(places)) * self)/pow(10.0, Double(places)))
     }
 }
+
+
