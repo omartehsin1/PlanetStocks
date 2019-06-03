@@ -208,17 +208,33 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
+                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Wqu-k1-2vV">
+                                <rect key="frame" x="16" y="45" width="272" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YxB-Em-riK">
+                                <rect key="frame" x="312" y="45" width="48" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Search"/>
+                                <connections>
+                                    <action selector="searchBTNPressed:" destination="G8k-fQ-l8c" eventType="touchUpInside" id="WIt-3i-rl1"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="FtM-cP-PUM"/>
                     </view>
                     <connections>
+                        <outlet property="indicatorTextField" destination="Wqu-k1-2vV" id="zu2-8H-3OO"/>
                         <outlet property="stockChartView" destination="qL9-9l-NHH" id="s5K-og-QpQ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="EEc-8I-18o" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4377" y="-247"/>
+            <point key="canvasLocation" x="4376.8000000000002" y="-247.82608695652175"/>
         </scene>
         <!--News View Controller-->
         <scene sceneID="erW-7b-4hy">
@@ -289,15 +305,22 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="R8E-pQ-8bu" customClass="PieChartView" customModule="Charts">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="275"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="269"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MzP-pd-J9c" customClass="LineChartView" customModule="Charts">
-                                <rect key="frame" x="0.0" y="283" width="375" height="282"/>
+                                <rect key="frame" x="0.0" y="315" width="375" height="250"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.63529413940000001" green="0.32941177490000001" blue="0.49019607900000001" alpha="1" colorSpace="deviceRGB"/>
                             </view>
+                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="8T6-WH-8US">
+                                <rect key="frame" x="278" y="277" width="97" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="hrL-kk-3Sy"/>
@@ -305,6 +328,7 @@
                     <connections>
                         <outlet property="lineChartView" destination="MzP-pd-J9c" id="Rjl-2f-yoJ"/>
                         <outlet property="pieChartView" destination="R8E-pQ-8bu" id="qFM-3C-CSs"/>
+                        <outlet property="stockSelectionTextfield" destination="8T6-WH-8US" id="bW2-l1-EG0"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZEo-IZ-0NR" userLabel="First Responder" sceneMemberID="firstResponder"/>

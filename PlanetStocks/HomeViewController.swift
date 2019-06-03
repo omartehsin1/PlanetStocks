@@ -261,9 +261,7 @@ class HomeViewController: UIViewController {
 
     }
     func selectDate() {
-        
-        
-        
+
         toolBar.sizeToFit()
         let doneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(doneClicked))
         

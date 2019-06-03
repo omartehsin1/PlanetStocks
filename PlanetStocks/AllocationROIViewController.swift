@@ -14,6 +14,7 @@ class AllocationROIViewController: UIViewController {
 
     @IBOutlet weak var pieChartView: PieChartView!
     @IBOutlet weak var lineChartView: LineChartView!
+    @IBOutlet weak var stockSelectionTextfield: UITextField!
     
     
     var otherStocks = [String]()
@@ -21,11 +22,15 @@ class AllocationROIViewController: UIViewController {
     var theStocks = [Double]()
     var theDollarInvested = [Double]()
     var savedStocks = [Stocks]()
+    let myPickerData = ["5 Min", "15 Min", "30 Min", "60 Min", "Daily"]
 
 
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let thePicker = UIPickerView()
+        stockSelectionTextfield.inputView = thePicker
+        thePicker.delegate = self
 
         
         let fetchRequest: NSFetchRequest<Stocks> = Stocks.fetchRequest()
@@ -42,6 +47,7 @@ class AllocationROIViewController: UIViewController {
 
         }
         
+        print(savedStocks)
         
         let theSumOfClosePrice = theStocks.reduce(0, +)
         
@@ -111,6 +117,11 @@ class AllocationROIViewController: UIViewController {
         let data = LineChartData()
         data.addDataSet(theLine)
         data.addDataSet(secondLine)
+        theLine.mode = .cubicBezier
+        secondLine.mode = .cubicBezier
+        theLine.cubicIntensity = 0.3
+        secondLine.cubicIntensity = 0.3
+        
         lineChartView.data = data
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd MMM YY"
@@ -128,30 +139,22 @@ class AllocationROIViewController: UIViewController {
         theLine.colors = colours
         secondLine.colors = colours
     }
-//    func setOtherLineChart(dataPoints: [String], values: [Double]) {
-//        var dataEntries = [ChartDataEntry]()
-//        for i in 0 ..< values.count {
-//            let dataEntry = ChartDataEntry(x: Double(i), y: values[i])
-//            dataEntries.append(dataEntry)
-//        }
-//        let theLine = LineChartDataSet(entries: dataEntries, label: nil)
-//        let data = LineChartData(dataSet: theLine)
-//        lineChartView.data = data
-//        let dateFormatter = DateFormatter()
-//        dateFormatter.dateFormat = "dd MMM YY"
-//
-//        var colours: [UIColor] = []
-//
-//        for _ in 0..<values.count {
-//            let red = Double(arc4random_uniform(256))
-//            let green = Double(arc4random_uniform(256))
-//            let blue = Double(arc4random_uniform(256))
-//
-//            let colour = UIColor(red: CGFloat(red/255), green: CGFloat(green/255), blue: CGFloat(blue/255), alpha: 1)
-//            colours.append(colour)
-//        }
-//        theLine.colors = colours
-//
-//    }
 
+}
+
+extension AllocationROIViewController: UIPickerViewDelegate, UIPickerViewDataSource {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return myPickerData.count
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return myPickerData[row]
+    }
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        stockSelectionTextfield.text = myPickerData[row]
+    }
 }

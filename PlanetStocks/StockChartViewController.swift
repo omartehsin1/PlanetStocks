@@ -16,54 +16,88 @@ class StockChartViewController: UIViewController {
     //API KEY: 9TR204K3GERJQJ33
     //JOW9MYUHX9HWJTDE
     
+    @IBOutlet weak var indicatorTextField: UITextField!
     var inputString = String()
     var companySearchArray = [String]()
     @IBOutlet weak var stockChartView: LineChartView!
     @IBOutlet weak var barChartView: BarChartView!
+    let myPickerData = ["Daily", "5 Min", "15 Min", "30 Min", "60 Min"]
     
     
     
-    var stockPrice = [Double]()
+    var dailyStockPrice = [Double]()
+    var fiveMinStockPrice = [Double]()
     var vol = [Double]()
     var theDates = [String]()
     var doubleDates = [Double]()
     let homeVC = HomeViewController()
     var symb = String()
     var theAPI = String()
-    var theResultsArray : [String: String] = [:]
+    var theDailyResultsArray : [String: String] = [:]
+    var the5MinResultsArray : [String: String] = [:]
+    var the15MinResultsArray : [String: String] = [:]
+    var the30MinResultsArray : [String: String] = [:]
+    var the60MinResultsArray : [String: String] = [:]
     var theVolumeArray : [String: String] = [:]
+    let thePicker = UIPickerView()
     //var api = "JOW9MYUHX9HWJTDE"
     
     //var api = "LI32913MGB8ROSV6"
     override func viewDidLoad() {
         super.viewDidLoad()
-        searchStockPrice(input: symb, api: theAPI)
-        for key in theResultsArray.keys.sorted(by: <) {
-            let price = Double(theResultsArray[key]!)!
+        searchDailyStockPrice(input: symb, api: theAPI)
+        
+        if indicatorTextField.text!.isEmpty {
+            indicatorTextField.text = myPickerData[0]
+        }
+        //search5MinStockPrice(input: symb, api: theAPI)
+        for key in theDailyResultsArray.keys.sorted(by: <) {
+            let price = Double(theDailyResultsArray[key]!)!
             let volume = Double(theVolumeArray[key]!)!
-            stockPrice.append(price)
+            dailyStockPrice.append(price)
             vol.append(volume)
             theDates.append(key)
         }
+//        let firstFive = dailyStockPrice.prefix(5)
+//        print(firstFive)
+        
+        for key in the5MinResultsArray.keys.sorted(by: <) {
+            let price = Double(the5MinResultsArray[key]!)!
+            fiveMinStockPrice.append(price)
+        }
+        
+        
+        indicatorTextField.inputView = thePicker
+        thePicker.delegate = self
+        thePicker.dataSource = self
+        createToolBar()
         
 
-        
-        // Do any additional setup after loading the view.
         
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         stockChartView.animate(xAxisDuration: 2.0, yAxisDuration: 2.0, easingOption: .easeInSine)
-        generateLineData(datapoints: theDates, values: stockPrice)
+        generateLineData(datapoints: theDates, values: dailyStockPrice)
     }
     
+    func createToolBar() {
+        let toolbar = UIToolbar()
+        toolbar.sizeToFit()
+        
+        let doneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(dismissKeyboard))
+        toolbar.setItems([doneButton], animated: false)
+        toolbar.isUserInteractionEnabled = true
+        indicatorTextField.inputAccessoryView = toolbar
+    }
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
     
-    
-    
-    func searchStockPrice(input: String, api: String) {
+    func searchDailyStockPrice(input: String, api: String) {
         let url = URL(string: "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=\(input)&apikey=\(api)")! 
-        print(url)
+        
         let data = NSData(contentsOf: url)
         
         do {
@@ -71,9 +105,74 @@ class StockChartViewController: UIViewController {
             for (key, subJSON) in results["Time Series (Daily)"] {
                 let open = subJSON["1. open"].rawString()
                 let volume = subJSON["5. volume"].rawString()
-                theResultsArray[key] = open
+                theDailyResultsArray[key] = open
                 theVolumeArray[key] = volume
                 
+            }
+            
+            
+        } catch  {
+            print("ERROR")
+        } //78
+        
+    }
+    func search5MinStockPrice(input: String, api: String) {
+        let url = URL(string: "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=\(input)&interval=5min&outputsize=full&apikey=\(api)")!
+        let data = NSData(contentsOf: url)
+        let date = Date()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        let currentDate = formatter.string(from: date)
+        print("The current date is: \(currentDate)")
+        
+        do {
+            let results = try JSON(data: data! as Data)
+            for (key, subJSON) in results["Time Series (5min)"] {
+                let close = subJSON["4. close"].rawString()
+                the5MinResultsArray[key] = close
+                
+            }
+            //print(the5MinResultsArray)
+            
+            
+        } catch  {
+            print("ERROR")
+        }
+        let filter = "2019-06-03"
+        let result = the5MinResultsArray.filter {$0.key.contains(filter)}
+        print(result)
+    }
+    
+    
+    
+    
+    func search15MinStockPrice(input: String, api: String) {
+        let url = URL(string: "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=\(input)&interval=15min&outputsize=full&apikey=\(api)")!
+        let data = NSData(contentsOf: url)
+        
+        do {
+            let results = try JSON(data: data! as Data)
+            for (key, subJSON) in results["Time Series (Daily)"] {
+                let close = subJSON["4. close"].rawString()
+                the15MinResultsArray[key] = close
+                
+            }
+            
+            
+        } catch  {
+            print("ERROR")
+        }
+        
+    }
+    func search30MinStockPrice(input: String, api: String) {
+        let url = URL(string: "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=\(input)&interval=30min&outputsize=full&apikey=\(api)")!
+        let data = NSData(contentsOf: url)
+        
+        do {
+            let results = try JSON(data: data! as Data)
+            for (key, subJSON) in results["Time Series (Daily)"] {
+                let close = subJSON["4. close"].rawString()
+                the30MinResultsArray[key] = close
                 
             }
             
@@ -84,72 +183,34 @@ class StockChartViewController: UIViewController {
         
     }
     
-
-    func generateBarChart() {
-        var barChartEntry: [BarChartDataEntry] = [BarChartDataEntry]()
-        for i in 0 ..< vol.count {
-            let value = BarChartDataEntry(x: Double(i), y: vol[i])
-            barChartEntry.append(value)
+    
+    func search60MinStockPrice(input: String, api: String) {
+        let url = URL(string: "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=\(input)&interval=60min&outputsize=full&apikey=\(api)")!
+        let data = NSData(contentsOf: url)
+        
+        do {
+            let results = try JSON(data: data! as Data)
+            for (key, subJSON) in results["Time Series (Daily)"] {
+                let close = subJSON["4. close"].rawString()
+                the60MinResultsArray[key] = close
+                
+            }
+            
+            
+        } catch  {
+            print("ERROR")
         }
-        
-        let volBars = BarChartDataSet(entries: barChartEntry, label: "Volume")
-        volBars.setColor(UIColor(red: 60/255, green: 220/255, blue: 78/255, alpha: 1))
-        let groupSpace = 0.06
-        let barSpace = 0.02
-        let barWidth = 0.45
-        
-        
-        let data = BarChartData(dataSet: volBars)
-        data.barWidth = barWidth
-        data.groupBars(fromX: 0, groupSpace: groupSpace, barSpace: barSpace)
-        
-        
-        barChartView.data = data
-        barChartView.chartDescription?.text = "Volume"
-        barChartView.animate(xAxisDuration: 2.0, yAxisDuration: 2.0)
-        barChartView.leftAxis.labelTextColor = .white
         
     }
 
-    
-    func convertCombined(dataEntryX forX:[String],dataEntryY forY: [Double], dataEntryZ forZ: [Double]) {
-        var dataEntries: [BarChartDataEntry] = []
-        var dataEntrieszor: [ChartDataEntry] = [ChartDataEntry]()
-        for (i, v) in forY.enumerated() {
-            let dataEntry = ChartDataEntry(x: Double(i), y: v, data: forX as AnyObject?)
-            dataEntrieszor.append(dataEntry)
+    @IBAction func searchBTNPressed(_ sender: Any) {
+        if indicatorTextField.text == "Daily" {
+            searchDailyStockPrice(input: symb, api: theAPI)
         }
         
-        for (i, v) in forZ.enumerated() {
-            let dataEntry = BarChartDataEntry(x: Double(i), y: v, data: forX as AnyObject?)
-            dataEntries.append(dataEntry)
-            
+        if indicatorTextField.text == "5 Min" {
+            search5MinStockPrice(input: symb, api: theAPI)
         }
-        //let max = stockPrice.max()
-        
-        let lineChartSet = LineChartDataSet(entries: dataEntrieszor, label: "Stock Price")
-        let lineChartData = LineChartData(dataSets: [lineChartSet])
-        
-        
-        
-        let barChartSet = BarChartDataSet(entries: dataEntries, label: "Volume")
-        let barChartData = BarChartData(dataSets: [barChartSet])
-        
-        //ui
-        lineChartSet.setColor(UIColor.red)
-        lineChartSet.setCircleColor(UIColor.red)
-        
-        let comData = CombinedChartData(dataSets: [lineChartSet,barChartSet])
-        comData.barData = barChartData
-        comData.lineData = lineChartData
-        
-        
-        stockChartView.data = comData
-        stockChartView.notifyDataSetChanged()
-        stockChartView.xAxis.valueFormatter = IndexAxisValueFormatter(values: theDates)
-        stockChartView.xAxis.granularity = 1
-        stockChartView.rightAxis.axisMaximum = stockPrice.max()!
-        stockChartView.leftAxis.axisMaximum = vol.max()!
     }
     
     
@@ -197,16 +258,6 @@ class StockChartViewController: UIViewController {
     }
     
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }
 
@@ -265,3 +316,24 @@ class CustomYAxisLabelValueFormatter : NSObject, IAxisValueFormatter {
     
     
 }
+
+extension StockChartViewController: UIPickerViewDelegate, UIPickerViewDataSource {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return myPickerData.count
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+
+        return myPickerData[row]
+    }
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        
+        indicatorTextField.text = myPickerData[row]
+    }
+}
+
+
