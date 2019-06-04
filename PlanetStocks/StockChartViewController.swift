@@ -33,6 +33,7 @@ class StockChartViewController: UIViewController {
     var theDates = [String]()
     var minuteIntervals = [String]()
     let homeVC = HomeViewController()
+    var newDateStringArray = [String]()
     var symb = String()
     var theAPI = String()
     var dailyResultsDict : [String: String] = [:]
@@ -68,14 +69,9 @@ class StockChartViewController: UIViewController {
         thePicker.delegate = self
         thePicker.dataSource = self
         createToolBar()
-        let theGesture = UITapGestureRecognizer(target: self, action: #selector(chartTouched(_:)))
-        stockChartView.addGestureRecognizer(theGesture)
-        
         
     }
-    @objc func chartTouched(_ sender: UITapGestureRecognizer) {
-        print(stockChartView.xAxis.labelPosition)
-    }
+    
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -119,11 +115,13 @@ class StockChartViewController: UIViewController {
     }
     func searchMinuteStockPrice(input: String, timeInterval: String, api: String) {
         let url = URL(string: "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=\(input)&interval=\(timeInterval)&outputsize=full&apikey=\(api)")!
+        print(url)
         let data = NSData(contentsOf: url)
         let date = Date()
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
         let currentDate = formatter.string(from: date)
+        //print(currentDate)
 
         
         do {
@@ -144,11 +142,25 @@ class StockChartViewController: UIViewController {
         
         
         
+        
         for key in result.keys.sorted(by: <) {
             let price = Double(minuteResultsDict[key]!)!
             minuteStockPrice.append(price)
+            
             minuteIntervals.append(key)
+            
         }
+        for theNewDate in minuteIntervals {
+            var newString = theNewDate.components(separatedBy: " ")
+            newString.removeAll(where: { $0 == currentDate})
+            for splitDate in newString {
+                newDateStringArray.append(splitDate)
+            }
+        }
+        print(newDateStringArray)
+        //let dateRemoval: Set<Character> = [currentDate]
+        
+        //print(minuteIntervals)
     }
 
 
@@ -160,27 +172,27 @@ class StockChartViewController: UIViewController {
         
         else if indicatorTextField.text == "5 Min" {
             searchMinuteStockPrice(input: symb, timeInterval: "5min", api: theAPI)
-            generateLineData(datapoints: minuteIntervals, values: minuteStockPrice)
-            minuteStockPrice.removeAll()
-            minuteStockPrice.removeAll()
+            generateLineData(datapoints: newDateStringArray, values: minuteStockPrice)
+            //minuteStockPrice.removeAll()
+            //minuteStockPrice.removeAll()
         }
         else if indicatorTextField.text == "15 Min" {
             searchMinuteStockPrice(input: symb, timeInterval: "15min", api: theAPI)
             generateLineData(datapoints: minuteIntervals, values: minuteStockPrice)
-            minuteStockPrice.removeAll()
-            minuteStockPrice.removeAll()
+            //minuteStockPrice.removeAll()
+            //minuteStockPrice.removeAll()
         }
         else if indicatorTextField.text == "30 Min" {
             searchMinuteStockPrice(input: symb, timeInterval: "30min", api: theAPI)
             generateLineData(datapoints: minuteIntervals, values: minuteStockPrice)
-            minuteStockPrice.removeAll()
-            minuteStockPrice.removeAll()
+            //minuteStockPrice.removeAll()
+            //minuteStockPrice.removeAll()
         }
         else if indicatorTextField.text == "60 Min" {
             searchMinuteStockPrice(input: symb, timeInterval: "60min", api: theAPI)
             generateLineData(datapoints: minuteIntervals, values: minuteStockPrice)
-            minuteStockPrice.removeAll()
-            minuteStockPrice.removeAll()
+            //minuteStockPrice.removeAll()
+            //minuteStockPrice.removeAll()
         }
     }
     
@@ -228,6 +240,7 @@ class StockChartViewController: UIViewController {
         stockChartView.xAxis.valueFormatter = IndexAxisValueFormatter(values: datapoints)
         stockChartView.xAxis.labelPosition = .bottom
         stockChartView.xAxis.labelFont = UIFont(name: "HelveticaNeue-Light", size: 10)!
+        stockChartView.xAxis.labelCount = 4
         stockChartView.xAxis.drawGridLinesEnabled = false
         stockChartView.chartDescription?.enabled = false
         stockChartView.legend.enabled = true
@@ -327,65 +340,10 @@ extension StockChartViewController: UIPickerViewDelegate, UIPickerViewDataSource
     }
 }
 
-/*
- 
- 
- 
- 
- func search15MinStockPrice(input: String, api: String) {
- let url = URL(string: "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=\(input)&interval=15min&outputsize=full&apikey=\(api)")!
- let data = NSData(contentsOf: url)
- 
- do {
- let results = try JSON(data: data! as Data)
- for (key, subJSON) in results["Time Series (Daily)"] {
- let close = subJSON["4. close"].rawString()
- the15MinResultsArray[key] = close
- 
- }
- 
- 
- } catch  {
- print("ERROR")
- }
- 
- }
- func search30MinStockPrice(input: String, api: String) {
- let url = URL(string: "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=\(input)&interval=30min&outputsize=full&apikey=\(api)")!
- let data = NSData(contentsOf: url)
- 
- do {
- let results = try JSON(data: data! as Data)
- for (key, subJSON) in results["Time Series (Daily)"] {
- let close = subJSON["4. close"].rawString()
- the30MinResultsArray[key] = close
- 
- }
- 
- 
- } catch  {
- print("ERROR")
- }
- 
- }
- 
- 
- func search60MinStockPrice(input: String, api: String) {
- let url = URL(string: "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=\(input)&interval=60min&outputsize=full&apikey=\(api)")!
- let data = NSData(contentsOf: url)
- 
- do {
- let results = try JSON(data: data! as Data)
- for (key, subJSON) in results["Time Series (Daily)"] {
- let close = subJSON["4. close"].rawString()
- the60MinResultsArray[key] = close
- 
- }
- 
- 
- } catch  {
- print("ERROR")
- }
- 
- }
- */
+extension String {
+    func removing(charactersOf string: String) -> String {
+        let characterSet = CharacterSet(charactersIn: string)
+        let components = self.components(separatedBy: characterSet)
+        return components.joined(separator: "")
+    }
+}
