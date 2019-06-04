@@ -27,6 +27,8 @@ class StockChartViewController: UIViewController {
     
     var dailyStockPrice = [Double]()
     var minuteStockPrice = [Double]()
+    var fiveDayPrice = [Double]()
+    var fiveDayDate = [String]()
     var vol = [Double]()
     var theDates = [String]()
     var minuteIntervals = [String]()
@@ -54,19 +56,25 @@ class StockChartViewController: UIViewController {
             vol.append(volume)
             theDates.append(key)
         }
+        let priceArraySlice = dailyStockPrice.suffix(5)
+        fiveDayPrice = Array(priceArraySlice)
+       
         
+        let dateArraySlice = theDates.suffix(5)
+        fiveDayDate = Array(dateArraySlice)
         
-        
-        
-        
-        
+
         indicatorTextField.inputView = thePicker
         thePicker.delegate = self
         thePicker.dataSource = self
         createToolBar()
+        let theGesture = UITapGestureRecognizer(target: self, action: #selector(chartTouched(_:)))
+        stockChartView.addGestureRecognizer(theGesture)
         
-
         
+    }
+    @objc func chartTouched(_ sender: UITapGestureRecognizer) {
+        print(stockChartView.xAxis.labelPosition)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -153,24 +161,26 @@ class StockChartViewController: UIViewController {
         else if indicatorTextField.text == "5 Min" {
             searchMinuteStockPrice(input: symb, timeInterval: "5min", api: theAPI)
             generateLineData(datapoints: minuteIntervals, values: minuteStockPrice)
+            minuteStockPrice.removeAll()
+            minuteStockPrice.removeAll()
         }
         else if indicatorTextField.text == "15 Min" {
-            minuteStockPrice.removeAll()
-            minuteStockPrice.removeAll()
             searchMinuteStockPrice(input: symb, timeInterval: "15min", api: theAPI)
             generateLineData(datapoints: minuteIntervals, values: minuteStockPrice)
+            minuteStockPrice.removeAll()
+            minuteStockPrice.removeAll()
         }
         else if indicatorTextField.text == "30 Min" {
-            minuteStockPrice.removeAll()
-            minuteStockPrice.removeAll()
             searchMinuteStockPrice(input: symb, timeInterval: "30min", api: theAPI)
             generateLineData(datapoints: minuteIntervals, values: minuteStockPrice)
+            minuteStockPrice.removeAll()
+            minuteStockPrice.removeAll()
         }
         else if indicatorTextField.text == "60 Min" {
-            minuteStockPrice.removeAll()
-            minuteStockPrice.removeAll()
             searchMinuteStockPrice(input: symb, timeInterval: "60min", api: theAPI)
             generateLineData(datapoints: minuteIntervals, values: minuteStockPrice)
+            minuteStockPrice.removeAll()
+            minuteStockPrice.removeAll()
         }
     }
     
@@ -190,7 +200,12 @@ class StockChartViewController: UIViewController {
         let data = LineChartData()
         data.addDataSet(line1)
         line1.colors = [NSUIColor.blue]
-        line1.circleRadius = 1
+        //line1.circleRadius = 1
+        
+        line1.drawCirclesEnabled = false
+        line1.highlightEnabled = true
+        line1.highlightColor = UIColor.green
+    
         //line1.fillAlpha = 1
         //line1.drawFilledEnabled = true
         //line1.fillColor = .blue
@@ -201,12 +216,18 @@ class StockChartViewController: UIViewController {
         guard let gradient = CGGradient.init(colorsSpace: CGColorSpaceCreateDeviceRGB(), colors: gradientColors, locations: colorLocations) else { print("gradient error"); return }
         line1.fill = Fill.fillWithLinearGradient(gradient, angle: 90.0)
         line1.drawFilledEnabled = true
+        line1.highlightEnabled = true
+        stockChartView.notifyDataSetChanged()
+        line1.drawVerticalHighlightIndicatorEnabled = false
+        line1.drawHorizontalHighlightIndicatorEnabled = false
 
         
         
         //Axes SetUp
+        
         stockChartView.xAxis.valueFormatter = IndexAxisValueFormatter(values: datapoints)
         stockChartView.xAxis.labelPosition = .bottom
+        stockChartView.xAxis.labelFont = UIFont(name: "HelveticaNeue-Light", size: 10)!
         stockChartView.xAxis.drawGridLinesEnabled = false
         stockChartView.chartDescription?.enabled = false
         stockChartView.legend.enabled = true
@@ -215,6 +236,15 @@ class StockChartViewController: UIViewController {
         stockChartView.leftAxis.drawLabelsEnabled = true
         
         stockChartView.data = data
+        stockChartView.data?.setValueTextColor(UIColor.clear)
+        stockChartView.isUserInteractionEnabled = true
+        let marker = BalloonMarker(color: UIColor.blue,
+                                   font: UIFont(name: "Avenir-Heavy", size: 14)!,
+                                   textColor: .white,
+                                   insets: UIEdgeInsets(top: 8, left: 8, bottom: 20, right: 8))
+        marker.chartView = stockChartView
+        marker.minimumSize = CGSize(width: 80, height: 40)
+        stockChartView.marker = marker
 
     }
     

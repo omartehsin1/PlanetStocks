@@ -21,6 +21,7 @@
 		07C2CD0E228DC7BE00758CE7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 07C2CD0D228DC7BE00758CE7 /* Assets.xcassets */; };
 		07C2CD11228DC7BE00758CE7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 07C2CD0F228DC7BE00758CE7 /* LaunchScreen.storyboard */; };
 		07C2CD1C228DC7BE00758CE7 /* PlanetStocksTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07C2CD1B228DC7BE00758CE7 /* PlanetStocksTests.swift */; };
+		07EF7AFE22A71E6D00650373 /* BalloonMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07EF7AFD22A71E6D00650373 /* BalloonMarker.swift */; };
 		2F803C0F63854888FCB924DA /* Pods_PlanetStocks.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7ABEAD5F6F96B5756CEF2DF /* Pods_PlanetStocks.framework */; };
 		800347E27B8BC861BA4F9157 /* Pods_PlanetStocksTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD2E621C5CBF3CACB80D6FA0 /* Pods_PlanetStocksTests.framework */; };
 /* End PBXBuildFile section */
@@ -54,6 +55,7 @@
 		07C2CD17228DC7BE00758CE7 /* PlanetStocksTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PlanetStocksTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		07C2CD1B228DC7BE00758CE7 /* PlanetStocksTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanetStocksTests.swift; sourceTree = "<group>"; };
 		07C2CD1D228DC7BE00758CE7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		07EF7AFD22A71E6D00650373 /* BalloonMarker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalloonMarker.swift; sourceTree = "<group>"; };
 		1FC3990FE4FBD9707664A9B7 /* Pods-PlanetStocks.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PlanetStocks.release.xcconfig"; path = "Target Support Files/Pods-PlanetStocks/Pods-PlanetStocks.release.xcconfig"; sourceTree = "<group>"; };
 		4D7D024A7A4BD897301FFCA3 /* Pods-PlanetStocksTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PlanetStocksTests.debug.xcconfig"; path = "Target Support Files/Pods-PlanetStocksTests/Pods-PlanetStocksTests.debug.xcconfig"; sourceTree = "<group>"; };
 		78D7B13679200AA7782A658B /* Pods-PlanetStocks.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PlanetStocks.debug.xcconfig"; path = "Target Support Files/Pods-PlanetStocks/Pods-PlanetStocks.debug.xcconfig"; sourceTree = "<group>"; };
@@ -116,6 +118,7 @@
 				07C2CD03228DC7BC00758CE7 /* AppDelegate.swift */,
 				07C2CD05228DC7BC00758CE7 /* MainViewController.swift */,
 				074C1B6422944F850020E1A6 /* StockChartViewController.swift */,
+				07EF7AFD22A71E6D00650373 /* BalloonMarker.swift */,
 				074C1B5F228F229F0020E1A6 /* WebServices.swift */,
 				07C2CD07228DC7BC00758CE7 /* Main.storyboard */,
 				075BD1DB229740220074AA61 /* AllocationROIViewController.swift */,
@@ -343,6 +346,7 @@
 				075BD1DC229740220074AA61 /* AllocationROIViewController.swift in Sources */,
 				07C2CD0C228DC7BC00758CE7 /* PlanetStocks.xcdatamodeld in Sources */,
 				07C2CD06228DC7BC00758CE7 /* MainViewController.swift in Sources */,
+				07EF7AFE22A71E6D00650373 /* BalloonMarker.swift in Sources */,
 				073CA5402295A2240051A4C2 /* HomeViewController.swift in Sources */,
 				073CA5422295B09E0051A4C2 /* PersistanceService.swift in Sources */,
 				074C1B63229444830020E1A6 /* NewsViewController.swift in Sources */,
