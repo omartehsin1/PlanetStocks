@@ -32,6 +32,7 @@ class HomeViewController: UIViewController {
     let toolBar = UIToolbar()
     let dateFormatter = DateFormatter()
     var dateString = String()
+    private let refreshControl = UIRefreshControl()
     
     @IBOutlet weak var stockSearchTextField: UITextField!
 
@@ -52,8 +53,15 @@ class HomeViewController: UIViewController {
             self.myStocksTableView.reloadData()
         } catch {}
         
+        if #available(iOS 10.0, *) {
+            myStocksTableView.refreshControl = refreshControl
+        } else {
+            myStocksTableView.addSubview(refreshControl)
+        }
         
-        
+        refreshControl.addTarget(self, action: #selector(refreshStockData(_:)), for: .valueChanged)
+        refreshControl.tintColor = UIColor(red:0.25, green:0.72, blue:0.85, alpha:1.0)
+        refreshControl.attributedTitle = NSAttributedString(string: "Updating Stock", attributes: nil)
 
         // Do any additional setup after loading the view.
     }
@@ -64,6 +72,9 @@ class HomeViewController: UIViewController {
             self.dropDown.show()
             
         }
+        
+    }
+    @objc private func refreshStockData(_ sender: Any) {
         
     }
     

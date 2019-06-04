@@ -6,11 +6,14 @@
 //  Copyright © 2019 Omar Tehsin. All rights reserved.
 //
 
-import Foundation
+import UIKit
 import Alamofire
 import SwiftyJSON
 
 class WebServices{
+    func randomFuncForTesting(input: String) {
+        
+    }
 
 }
 

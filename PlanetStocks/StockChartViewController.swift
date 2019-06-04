@@ -26,18 +26,15 @@ class StockChartViewController: UIViewController {
     
     
     var dailyStockPrice = [Double]()
-    var fiveMinStockPrice = [Double]()
+    var minuteStockPrice = [Double]()
     var vol = [Double]()
     var theDates = [String]()
-    var doubleDates = [Double]()
+    var minuteIntervals = [String]()
     let homeVC = HomeViewController()
     var symb = String()
     var theAPI = String()
-    var theDailyResultsArray : [String: String] = [:]
-    var the5MinResultsArray : [String: String] = [:]
-    var the15MinResultsArray : [String: String] = [:]
-    var the30MinResultsArray : [String: String] = [:]
-    var the60MinResultsArray : [String: String] = [:]
+    var dailyResultsDict : [String: String] = [:]
+    var minuteResultsDict : [String: String] = [:]
     var theVolumeArray : [String: String] = [:]
     let thePicker = UIPickerView()
     //var api = "JOW9MYUHX9HWJTDE"
@@ -50,21 +47,17 @@ class StockChartViewController: UIViewController {
         if indicatorTextField.text!.isEmpty {
             indicatorTextField.text = myPickerData[0]
         }
-        //search5MinStockPrice(input: symb, api: theAPI)
-        for key in theDailyResultsArray.keys.sorted(by: <) {
-            let price = Double(theDailyResultsArray[key]!)!
+        for key in dailyResultsDict.keys.sorted(by: <) {
+            let price = Double(dailyResultsDict[key]!)!
             let volume = Double(theVolumeArray[key]!)!
             dailyStockPrice.append(price)
             vol.append(volume)
             theDates.append(key)
         }
-//        let firstFive = dailyStockPrice.prefix(5)
-//        print(firstFive)
         
-        for key in the5MinResultsArray.keys.sorted(by: <) {
-            let price = Double(the5MinResultsArray[key]!)!
-            fiveMinStockPrice.append(price)
-        }
+        
+        
+        
         
         
         indicatorTextField.inputView = thePicker
@@ -105,7 +98,7 @@ class StockChartViewController: UIViewController {
             for (key, subJSON) in results["Time Series (Daily)"] {
                 let open = subJSON["1. open"].rawString()
                 let volume = subJSON["5. volume"].rawString()
-                theDailyResultsArray[key] = open
+                dailyResultsDict[key] = open
                 theVolumeArray[key] = volume
                 
             }
@@ -116,20 +109,20 @@ class StockChartViewController: UIViewController {
         } //78
         
     }
-    func search5MinStockPrice(input: String, api: String) {
-        let url = URL(string: "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=\(input)&interval=5min&outputsize=full&apikey=\(api)")!
+    func searchMinuteStockPrice(input: String, timeInterval: String, api: String) {
+        let url = URL(string: "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=\(input)&interval=\(timeInterval)&outputsize=full&apikey=\(api)")!
         let data = NSData(contentsOf: url)
         let date = Date()
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
         let currentDate = formatter.string(from: date)
-        print("The current date is: \(currentDate)")
+
         
         do {
             let results = try JSON(data: data! as Data)
             for (key, subJSON) in results["Time Series (5min)"] {
                 let close = subJSON["4. close"].rawString()
-                the5MinResultsArray[key] = close
+                minuteResultsDict[key] = close
                 
             }
             //print(the5MinResultsArray)
@@ -138,78 +131,46 @@ class StockChartViewController: UIViewController {
         } catch  {
             print("ERROR")
         }
-        let filter = "2019-06-03"
-        let result = the5MinResultsArray.filter {$0.key.contains(filter)}
-        print(result)
-    }
-    
-    
-    
-    
-    func search15MinStockPrice(input: String, api: String) {
-        let url = URL(string: "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=\(input)&interval=15min&outputsize=full&apikey=\(api)")!
-        let data = NSData(contentsOf: url)
+        let filter = currentDate
+        let result = minuteResultsDict.filter {$0.key.contains(filter)}
         
-        do {
-            let results = try JSON(data: data! as Data)
-            for (key, subJSON) in results["Time Series (Daily)"] {
-                let close = subJSON["4. close"].rawString()
-                the15MinResultsArray[key] = close
-                
-            }
-            
-            
-        } catch  {
-            print("ERROR")
+        
+        
+        for key in result.keys.sorted(by: <) {
+            let price = Double(minuteResultsDict[key]!)!
+            minuteStockPrice.append(price)
+            minuteIntervals.append(key)
         }
-        
     }
-    func search30MinStockPrice(input: String, api: String) {
-        let url = URL(string: "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=\(input)&interval=30min&outputsize=full&apikey=\(api)")!
-        let data = NSData(contentsOf: url)
-        
-        do {
-            let results = try JSON(data: data! as Data)
-            for (key, subJSON) in results["Time Series (Daily)"] {
-                let close = subJSON["4. close"].rawString()
-                the30MinResultsArray[key] = close
-                
-            }
-            
-            
-        } catch  {
-            print("ERROR")
-        }
-        
-    }
-    
-    
-    func search60MinStockPrice(input: String, api: String) {
-        let url = URL(string: "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=\(input)&interval=60min&outputsize=full&apikey=\(api)")!
-        let data = NSData(contentsOf: url)
-        
-        do {
-            let results = try JSON(data: data! as Data)
-            for (key, subJSON) in results["Time Series (Daily)"] {
-                let close = subJSON["4. close"].rawString()
-                the60MinResultsArray[key] = close
-                
-            }
-            
-            
-        } catch  {
-            print("ERROR")
-        }
-        
-    }
+
 
     @IBAction func searchBTNPressed(_ sender: Any) {
         if indicatorTextField.text == "Daily" {
             searchDailyStockPrice(input: symb, api: theAPI)
+            generateLineData(datapoints: theDates, values: dailyStockPrice)
         }
         
-        if indicatorTextField.text == "5 Min" {
-            search5MinStockPrice(input: symb, api: theAPI)
+        else if indicatorTextField.text == "5 Min" {
+            searchMinuteStockPrice(input: symb, timeInterval: "5min", api: theAPI)
+            generateLineData(datapoints: minuteIntervals, values: minuteStockPrice)
+        }
+        else if indicatorTextField.text == "15 Min" {
+            minuteStockPrice.removeAll()
+            minuteStockPrice.removeAll()
+            searchMinuteStockPrice(input: symb, timeInterval: "15min", api: theAPI)
+            generateLineData(datapoints: minuteIntervals, values: minuteStockPrice)
+        }
+        else if indicatorTextField.text == "30 Min" {
+            minuteStockPrice.removeAll()
+            minuteStockPrice.removeAll()
+            searchMinuteStockPrice(input: symb, timeInterval: "30min", api: theAPI)
+            generateLineData(datapoints: minuteIntervals, values: minuteStockPrice)
+        }
+        else if indicatorTextField.text == "60 Min" {
+            minuteStockPrice.removeAll()
+            minuteStockPrice.removeAll()
+            searchMinuteStockPrice(input: symb, timeInterval: "60min", api: theAPI)
+            generateLineData(datapoints: minuteIntervals, values: minuteStockPrice)
         }
     }
     
@@ -336,4 +297,65 @@ extension StockChartViewController: UIPickerViewDelegate, UIPickerViewDataSource
     }
 }
 
-
+/*
+ 
+ 
+ 
+ 
+ func search15MinStockPrice(input: String, api: String) {
+ let url = URL(string: "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=\(input)&interval=15min&outputsize=full&apikey=\(api)")!
+ let data = NSData(contentsOf: url)
+ 
+ do {
+ let results = try JSON(data: data! as Data)
+ for (key, subJSON) in results["Time Series (Daily)"] {
+ let close = subJSON["4. close"].rawString()
+ the15MinResultsArray[key] = close
+ 
+ }
+ 
+ 
+ } catch  {
+ print("ERROR")
+ }
+ 
+ }
+ func search30MinStockPrice(input: String, api: String) {
+ let url = URL(string: "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=\(input)&interval=30min&outputsize=full&apikey=\(api)")!
+ let data = NSData(contentsOf: url)
+ 
+ do {
+ let results = try JSON(data: data! as Data)
+ for (key, subJSON) in results["Time Series (Daily)"] {
+ let close = subJSON["4. close"].rawString()
+ the30MinResultsArray[key] = close
+ 
+ }
+ 
+ 
+ } catch  {
+ print("ERROR")
+ }
+ 
+ }
+ 
+ 
+ func search60MinStockPrice(input: String, api: String) {
+ let url = URL(string: "https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=\(input)&interval=60min&outputsize=full&apikey=\(api)")!
+ let data = NSData(contentsOf: url)
+ 
+ do {
+ let results = try JSON(data: data! as Data)
+ for (key, subJSON) in results["Time Series (Daily)"] {
+ let close = subJSON["4. close"].rawString()
+ the60MinResultsArray[key] = close
+ 
+ }
+ 
+ 
+ } catch  {
+ print("ERROR")
+ }
+ 
+ }
+ */

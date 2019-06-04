@@ -33,7 +33,7 @@ class NewsViewController: UIViewController {
     
     func getNews(input: String) {
         
-        let url = URL(string: "https://stocknewsapi.com/api/v1?tickers=\(input)&items=10&fallback=true&token=\(api)")!
+        let url = URL(string: "https://stocknewsapi.com/api/v1?tickers=\(input)&items=20&fallback=true&token=\(api)")!
         
         
         
