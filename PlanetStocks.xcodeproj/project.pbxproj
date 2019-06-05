@@ -14,6 +14,7 @@
 		074C1B63229444830020E1A6 /* NewsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 074C1B62229444820020E1A6 /* NewsViewController.swift */; };
 		074C1B6522944F850020E1A6 /* StockChartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 074C1B6422944F850020E1A6 /* StockChartViewController.swift */; };
 		075BD1DC229740220074AA61 /* AllocationROIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 075BD1DB229740220074AA61 /* AllocationROIViewController.swift */; };
+		07958D9322A83079004456AF /* XYMarkerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07958D9222A83078004456AF /* XYMarkerView.swift */; };
 		07C2CD04228DC7BC00758CE7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07C2CD03228DC7BC00758CE7 /* AppDelegate.swift */; };
 		07C2CD06228DC7BC00758CE7 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07C2CD05228DC7BC00758CE7 /* MainViewController.swift */; };
 		07C2CD09228DC7BC00758CE7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 07C2CD07228DC7BC00758CE7 /* Main.storyboard */; };
@@ -44,6 +45,7 @@
 		074C1B62229444820020E1A6 /* NewsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsViewController.swift; sourceTree = "<group>"; };
 		074C1B6422944F850020E1A6 /* StockChartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockChartViewController.swift; sourceTree = "<group>"; };
 		075BD1DB229740220074AA61 /* AllocationROIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllocationROIViewController.swift; sourceTree = "<group>"; };
+		07958D9222A83078004456AF /* XYMarkerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XYMarkerView.swift; sourceTree = "<group>"; };
 		07C2CD00228DC7BC00758CE7 /* PlanetStocks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PlanetStocks.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		07C2CD03228DC7BC00758CE7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		07C2CD05228DC7BC00758CE7 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
@@ -119,6 +121,7 @@
 				07C2CD05228DC7BC00758CE7 /* MainViewController.swift */,
 				074C1B6422944F850020E1A6 /* StockChartViewController.swift */,
 				07EF7AFD22A71E6D00650373 /* BalloonMarker.swift */,
+				07958D9222A83078004456AF /* XYMarkerView.swift */,
 				074C1B5F228F229F0020E1A6 /* WebServices.swift */,
 				07C2CD07228DC7BC00758CE7 /* Main.storyboard */,
 				075BD1DB229740220074AA61 /* AllocationROIViewController.swift */,
@@ -353,6 +356,7 @@
 				074C1B6522944F850020E1A6 /* StockChartViewController.swift in Sources */,
 				07C2CD04228DC7BC00758CE7 /* AppDelegate.swift in Sources */,
 				073CA53E2294905F0051A4C2 /* Alert.swift in Sources */,
+				07958D9322A83079004456AF /* XYMarkerView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

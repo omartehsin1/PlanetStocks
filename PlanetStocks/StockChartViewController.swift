@@ -21,7 +21,7 @@ class StockChartViewController: UIViewController {
     var companySearchArray = [String]()
     @IBOutlet weak var stockChartView: LineChartView!
     @IBOutlet weak var barChartView: BarChartView!
-    let myPickerData = ["Daily", "5 Min", "15 Min", "30 Min", "60 Min"]
+    let myPickerData = ["Daily", "5 Min"]
     
     
     
@@ -157,7 +157,7 @@ class StockChartViewController: UIViewController {
                 newDateStringArray.append(splitDate)
             }
         }
-        print(newDateStringArray)
+        //print(newDateStringArray)
         //let dateRemoval: Set<Character> = [currentDate]
         
         //print(minuteIntervals)
@@ -176,40 +176,32 @@ class StockChartViewController: UIViewController {
             //minuteStockPrice.removeAll()
             //minuteStockPrice.removeAll()
         }
-        else if indicatorTextField.text == "15 Min" {
-            searchMinuteStockPrice(input: symb, timeInterval: "15min", api: theAPI)
-            generateLineData(datapoints: minuteIntervals, values: minuteStockPrice)
-            //minuteStockPrice.removeAll()
-            //minuteStockPrice.removeAll()
-        }
-        else if indicatorTextField.text == "30 Min" {
-            searchMinuteStockPrice(input: symb, timeInterval: "30min", api: theAPI)
-            generateLineData(datapoints: minuteIntervals, values: minuteStockPrice)
-            //minuteStockPrice.removeAll()
-            //minuteStockPrice.removeAll()
-        }
-        else if indicatorTextField.text == "60 Min" {
-            searchMinuteStockPrice(input: symb, timeInterval: "60min", api: theAPI)
-            generateLineData(datapoints: minuteIntervals, values: minuteStockPrice)
-            //minuteStockPrice.removeAll()
-            //minuteStockPrice.removeAll()
-        }
+
     }
     
     
     
     
     func generateLineData(datapoints: [String], values: [Double]) {
-        
+//        let marker = BalloonMarker(color: UIColor.blue,
+//                                   font: UIFont(name: "Avenir-Heavy", size: 14)!,
+//                                   textColor: .white,
+//                                   insets: UIEdgeInsets(top: 8, left: 8, bottom: 20, right: 8))
+        let marker = XYMarkerView(color: UIColor.blue, font: UIFont(name: "Avenir-Heavy", size: 14)!, textColor: .white, insets: UIEdgeInsets(top: 8, left: 8, bottom: 20, right: 8), xAxisValueFormatter: IndexAxisValueFormatter(values: datapoints))
+        let data = LineChartData()
         
         var lineChartEntry = [ChartDataEntry]()
         for i in 0 ..< values.count {
-            let value = ChartDataEntry(x: Double(i), y: values[i])
+            let value = ChartDataEntry(x: Double(i), y: values[i], data: (data as AnyObject))
+            print(value)
             lineChartEntry.append(value)
         }
+        //print("The datapoints are: \(datapoints)")
+
+
         
         let line1 = LineChartDataSet(entries: lineChartEntry, label: "Price")
-        let data = LineChartData()
+        
         data.addDataSet(line1)
         line1.colors = [NSUIColor.blue]
         //line1.circleRadius = 1
@@ -217,10 +209,6 @@ class StockChartViewController: UIViewController {
         line1.drawCirclesEnabled = false
         line1.highlightEnabled = true
         line1.highlightColor = UIColor.green
-    
-        //line1.fillAlpha = 1
-        //line1.drawFilledEnabled = true
-        //line1.fillColor = .blue
         
         //Gradient Fill
         let gradientColors = [UIColor.blue.cgColor, UIColor.clear.cgColor] as CFArray
@@ -249,13 +237,12 @@ class StockChartViewController: UIViewController {
         stockChartView.leftAxis.drawLabelsEnabled = true
         
         stockChartView.data = data
+        
         stockChartView.data?.setValueTextColor(UIColor.clear)
         stockChartView.isUserInteractionEnabled = true
-        let marker = BalloonMarker(color: UIColor.blue,
-                                   font: UIFont(name: "Avenir-Heavy", size: 14)!,
-                                   textColor: .white,
-                                   insets: UIEdgeInsets(top: 8, left: 8, bottom: 20, right: 8))
+        
         marker.chartView = stockChartView
+        
         marker.minimumSize = CGSize(width: 80, height: 40)
         stockChartView.marker = marker
 
@@ -345,5 +332,11 @@ extension String {
         let characterSet = CharacterSet(charactersIn: string)
         let components = self.components(separatedBy: characterSet)
         return components.joined(separator: "")
+    }
+}
+
+extension String {
+    func toDouble() -> Double? {
+        return NumberFormatter().number(from: self)?.doubleValue
     }
 }
